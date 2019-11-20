@@ -1,0 +1,15 @@
+{
+	"name": "Finalprojectalice",
+	"version": 0.0.1,
+	"author": "Redndahead",
+	"maintainers": [],
+	"desc": "Takes care of final project",
+	"aliceMinVersion": 1.0.0,
+	"pipRequirements": [],
+	"systemRequirements": [],
+	"conditions": {
+		"lang": [
+			"en"
+		]
+	}
+}
