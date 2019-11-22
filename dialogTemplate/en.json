@@ -1,7 +1,7 @@
 {
-    "module": "Finalproject",
+    "module": "finalprojectalice",
     "icon": "time",
-    "description": "Takes care of final project",
+    "description": "Takes care of final project alice",
     "slotTypes": [
         {
             "name": "DummySlot",
