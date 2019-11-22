@@ -32,5 +32,4 @@ class finalprojectalice(Module):
 		self.ThreadManager.doLater(interval=rnd, func=self.randomlySpeak)
 		self.logInfo(f'Scheduled next random speaking in {rnd} seconds')
 
-		if not init and not self.UserManager.checkIfAllUser('goingBed') and not self.UserManager.checkIfAllUser('sleeping'):
-			self.say(self.randomTalk(f'randomlySpeakAnger'), siteId='all')
+		self.say(self.randomTalk(f'randomlySpeakAnger'), siteId='all')
