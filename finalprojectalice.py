@@ -6,7 +6,7 @@ from core.base.model.Module import Module
 from core.dialog.model.DialogSession import DialogSession
 
 
-class Finalprojectalice(Module):
+class finalprojectalice(Module):
 	"""
 	Author: Redndahead
 	Description: Takes care of final project
