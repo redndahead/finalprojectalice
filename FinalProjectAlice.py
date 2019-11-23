@@ -61,18 +61,18 @@ class FinalProjectAlice(Module):
 		to_date = '2019-11-24'
 		timezone_id = 'US/Pacific'
 
-		all_events = cronofy.read_events(calendar_ids=(calendarID,),
-										 from_date=from_date,
-										 to_date=to_date,
-										 tzid=timezone_id
-										 ).all()
+		#all_events = cronofy.read_events(calendar_ids=(calendarID,),
+		#								 from_date=from_date,
+		#								 to_date=to_date,
+		#								 tzid=timezone_id
+		#								 ).all()
 
-		eventsOutput = json.dumps(all_events)
-		self.logInfo(f'Calendar: {eventsOutput}')
+		#eventsOutput = json.dumps(all_events)
+		#self.logInfo(f'Calendar: {eventsOutput}')
 
-		for event in all_events:
-			self.logInfo(f'{event["summary"]}')
-			self.say(f'Event name: {event["summary"]}. Event Start: {event["start"]}')
+		#for event in all_events:
+		#	self.logInfo(f'{event["summary"]}')
+		#	self.say(f'Event name: {event["summary"]}. Event Start: {event["start"]}')
 
 	@IntentHandler('NextMeeting')
 	def nextMeeting(self, session: DialogSession, **_kwargs):
