@@ -10,11 +10,10 @@
             "enabledByDefault": true,
             "utterances": [
                 "what is the next meeting",
-                "what's up next",
-                "who is in here next",
-                "what is happening next",
-                "up next",
-                "what's next",
+                "what meeting is up next",
+                "who is in here for the next meeting",
+                "what meeting is happening next",
+                "meeting up next",
                 "what meeting"
             ],
             "slots": []
