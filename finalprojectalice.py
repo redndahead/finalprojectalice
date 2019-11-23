@@ -52,4 +52,5 @@ class finalprojectalice(Module):
 		self.logInfo(f'Calendar: {eventsOutput}')
 
 		for event in all_events:
+			self.logInfo(f'{event}')
 			self.say(f'Event name: {event.summary}')
