@@ -32,4 +32,7 @@ class finalprojectalice(Module):
 		self.ThreadManager.doLater(interval=rnd, func=self.randomlySpeak)
 		self.logInfo(f'Scheduled next random speaking in {rnd} seconds')
 
+		key = self.getConfig('cronofykey')
+		self.logInfo(key)
+		
 		self.say(self.randomTalk(f'randomlySpeakAnger'))
