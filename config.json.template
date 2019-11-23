@@ -3,5 +3,15 @@
 		"defaultValue": "",
 		"dataType": "string",
 		"description": "Key for cronofy"
+	},
+	"refreshTime": {
+		"defaultValue": 100,
+		"dataType": "integer",
+		"description": "Refresh Time"
+	},
+	"calendarID": {
+		"defaultValue": "",
+		"dataType": "string",
+		"description": "CalendarID"
 	}
 }

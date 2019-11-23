@@ -1,5 +1,6 @@
 import json
 import pycronofy
+import datetime
 
 from core.base.model.Intent import Intent
 from core.base.model.Module import Module
@@ -29,14 +30,25 @@ class finalprojectalice(Module):
 		self.randomlySpeak(init=True)
 
 	def randomlySpeak(self, init: bool = False):
-		rnd = 10
+		rnd = self.getConfig('refreshTime')
 		self.ThreadManager.doLater(interval=rnd, func=self.randomlySpeak)
 		self.logInfo(f'Scheduled next random speaking in {rnd} seconds')
 
 		key = self.getConfig('cronofykey')
+		calendarID = self.getConfig('calendarID')
 		cronofy = pycronofy.Client(access_token=key)
-		for calendar in cronofy.list_calendars():
-			calendarOutput = json.dumps(calendar)
-			self.logInfo(f'Calendar: {calendarOutput}')
+
+		from_date = '2019-11-22T22:00:00Z'
+		to_date = '2019-11-22T23:59:59Z'
+		timezone_id = 'US/Pacific'
+
+		all_events = cronofy.read_events(calendar_ids=(calendarID,),
+										 from_date=from_date,
+										 to_date=to_date,
+										 tzid=timezone_id
+										 ).all()
+
+		eventsOutput = json.dumps(all_events)
+		self.logInfo(f'Calendar: {eventsOutput}')
 
 		self.say(self.randomTalk(f'randomlySpeakAnger'))
