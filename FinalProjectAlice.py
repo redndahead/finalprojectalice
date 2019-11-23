@@ -52,7 +52,9 @@ class FinalProjectAlice(Module):
 		#self.logInfo(f'Scheduled next random speaking in {rnd} seconds')
 
 		key = self.getConfig('cronofykey')
+		self.logInfo(f'key: {key}')
 		calendarID = self.getConfig('calendarID')
+		self.logInfo(f'calendarID: {calendarID}')
 		cronofy = pycronofy.Client(access_token=key)
 
 		from_date = '2019-11-22'
