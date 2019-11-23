@@ -2,9 +2,9 @@ import json
 import pycronofy
 import datetime
 
-from core.base.model.Intent import Intent
 from core.base.model.Module import Module
 from core.dialog.model.DialogSession import DialogSession
+from core.util.Decorators import IntentHandler
 
 
 class finalprojectalice(Module):
@@ -27,7 +27,24 @@ class finalprojectalice(Module):
 		slots = session.slots
 
 	def onBooted(self):
-		self.randomlySpeak(init=True)
+		self.loadCalendar()
+
+	def loadCalendar(self):
+		key = self.getConfig('cronofykey')
+		calendarID = self.getConfig('calendarID')
+		cronofy = pycronofy.Client(access_token=key)
+
+		from_date = '2019-11-22'
+		to_date = '2019-11-24'
+		timezone_id = 'US/Pacific'
+
+		all_events = cronofy.read_events(calendar_ids=(calendarID,),
+										 from_date=from_date,
+										 to_date=to_date,
+										 tzid=timezone_id
+										 ).all()
+
+		self.updateConfig(key="eventList", value=json.dumps(all_events))
 
 	def randomlySpeak(self, init: bool = False):
 		rnd = self.getConfig('refreshTime')
@@ -54,3 +71,8 @@ class finalprojectalice(Module):
 		for event in all_events:
 			self.logInfo(f'{event["summary"]}')
 			self.say(f'Event name: {event["summary"]}. Event Start: {event["start"]}')
+
+	@IntentHandler('NextMeeting')
+	def nextMeeting(self, session: DialogSession, **_kwargs):
+
+		self.endDialog(session.sessionId, f'Test')

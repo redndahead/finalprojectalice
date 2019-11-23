@@ -2,38 +2,21 @@
     "module": "finalprojectalice",
     "icon": "time",
     "description": "Takes care of final project alice",
-    "slotTypes": [
-        {
-            "name": "DummySlot",
-            "matchingStrictness": null,
-            "automaticallyExtensible": false,
-            "useSynonyms": true,
-            "values": [
-                {
-                    "value": "foo",
-                    "synonyms": ["bar"]
-                }
-            ]
-        }
-    ],
+    "slotTypes": [],
     "intents": [
         {
-            "name": "Dummy",
-            "description": "REMOVE this dummy intent!",
+            "name": "NextMeeting",
+            "description": "User asks for the next meeting",
             "enabledByDefault": true,
             "utterances": [
-                "dummy {foo:=>DummySlotName}",
-                "bar"
+                "what is the next meeting",
+                "what's up next",
+                "who is in here next",
+                "what is happening next",
+                "up next",
+                "what's next"
             ],
-            "slots": [
-                {
-                    "name": "DummySlotName",
-                    "description": "dummy",
-                    "required": false,
-                    "type": "DummySlot",
-                    "missingQuestion": ""
-                }
-            ]
+            "slots": []
         }
     ]
 }

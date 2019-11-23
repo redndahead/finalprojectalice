@@ -13,5 +13,10 @@
 		"defaultValue": "",
 		"dataType": "string",
 		"description": "CalendarID"
+	},
+	"eventList": {
+		"defaultValue": "",
+		"dataType": "string",
+		"description": "List of events on this device."
 	}
 }
