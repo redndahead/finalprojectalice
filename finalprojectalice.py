@@ -33,6 +33,6 @@ class finalprojectalice(Module):
 		self.logInfo(f'Scheduled next random speaking in {rnd} seconds')
 
 		key = self.getConfig('cronofykey')
-		self.logInfo(f'{key}')
+		self.logInfo(f'CronoKey: {key}')
 
 		self.say(self.randomTalk(f'randomlySpeakAnger'))
