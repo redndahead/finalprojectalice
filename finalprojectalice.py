@@ -33,6 +33,8 @@ class finalprojectalice(Module):
 		self.logInfo(f'Scheduled next random speaking in {rnd} seconds')
 
 		key = self.getConfig('cronofykey')
-		self.logInfo(f'CronoKey: {key}')
+		cronofy = pycronofy.Client(access_token=key)
+		for calendar in cronofy.list_calendars():
+			self.logInfo(f'Calendar: {calendar}')
 
 		self.say(self.randomTalk(f'randomlySpeakAnger'))
