@@ -1,0 +1,7 @@
+{
+	"cronofykey": {
+		"defaultValue": "",
+		"dataType": "string",
+		"description": "Key for cronofy"
+	}
+}
