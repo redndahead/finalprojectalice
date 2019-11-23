@@ -1,4 +1,5 @@
 import json
+import pycronofy
 
 from core.base.model.Intent import Intent
 from core.base.model.Module import Module
