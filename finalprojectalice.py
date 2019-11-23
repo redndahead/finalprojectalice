@@ -31,15 +31,15 @@ class finalprojectalice(Module):
 
 	def randomlySpeak(self, init: bool = False):
 		rnd = self.getConfig('refreshTime')
-		self.ThreadManager.doLater(interval=rnd, func=self.randomlySpeak)
-		self.logInfo(f'Scheduled next random speaking in {rnd} seconds')
+		#self.ThreadManager.doLater(interval=rnd, func=self.randomlySpeak)
+		#self.logInfo(f'Scheduled next random speaking in {rnd} seconds')
 
 		key = self.getConfig('cronofykey')
 		calendarID = self.getConfig('calendarID')
 		cronofy = pycronofy.Client(access_token=key)
 
-		from_date = '2019-11-22T22:00:00Z'
-		to_date = '2019-11-22T23:59:59Z'
+		from_date = '2019-11-22'
+		to_date = '2019-11-24'
 		timezone_id = 'US/Pacific'
 
 		all_events = cronofy.read_events(calendar_ids=(calendarID,),
@@ -51,4 +51,5 @@ class finalprojectalice(Module):
 		eventsOutput = json.dumps(all_events)
 		self.logInfo(f'Calendar: {eventsOutput}')
 
-		self.say(self.randomTalk(f'randomlySpeakAnger'))
+		for event in all_events:
+			self.say(f'Event name: {event.summary}')
