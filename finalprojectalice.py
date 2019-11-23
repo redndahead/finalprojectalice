@@ -35,6 +35,7 @@ class finalprojectalice(Module):
 		key = self.getConfig('cronofykey')
 		cronofy = pycronofy.Client(access_token=key)
 		for calendar in cronofy.list_calendars():
-			self.logInfo(f'Calendar: {calendar}')
+			calendarOutput = json.dumps(calendar)
+			self.logInfo(f'Calendar: {calendarOutput}')
 
 		self.say(self.randomTalk(f'randomlySpeakAnger'))
