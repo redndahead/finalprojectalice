@@ -53,4 +53,4 @@ class finalprojectalice(Module):
 
 		for event in all_events:
 			self.logInfo(f'{event["summary"]}')
-			self.say(f'Event name: {event["summary"]}')
+			self.say(f'Event name: {event["summary"]}. Event Start: {event["start"]}')
