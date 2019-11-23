@@ -14,7 +14,8 @@
                 "who is in here next",
                 "what is happening next",
                 "up next",
-                "what's next"
+                "what's next",
+                "what meeting"
             ],
             "slots": []
         }
