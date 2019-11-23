@@ -7,7 +7,7 @@ from core.dialog.model.DialogSession import DialogSession
 from core.util.Decorators import IntentHandler
 
 
-class finalprojectalice(Module):
+class FinalProjectAlice(Module):
 	"""
 	Author: Redndahead
 	Description: Takes care of final project
