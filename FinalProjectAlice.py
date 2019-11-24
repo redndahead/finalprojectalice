@@ -28,6 +28,7 @@ class FinalProjectAlice(Module):
 
 	def onBooted(self):
 		self.loadCalendar()
+		self.askQuestion()
 
 	def loadCalendar(self):
 		key = self.getConfig('cronofykey')
@@ -96,6 +97,13 @@ class FinalProjectAlice(Module):
 		time = time + ' ' + ampm
 		return time
 
+	def askQuestion(self):
+		self.ask(
+			text = "Are the attendee's there?",
+			intentFilter=[self._INTENT_ANSWER_YES_OR_NO],
+			currentDialogState="InquireAttendee"
+		)
+
 	@IntentHandler('NextMeeting')
 	def nextMeeting(self, session: DialogSession, **_kwargs):
 		eventList = json.loads(self.getConfig('eventList'))
@@ -104,5 +112,10 @@ class FinalProjectAlice(Module):
 
 		event = eventList[1]
 		time = self.formatTimeToVoice(time=eventList[1]["start"]["time"])
-		self.logInfo(f'time2: {time}')
+
 		self.endDialog(session.sessionId, f'The next event is {event["summary"]}. It will begin at {time}')
+
+	@IntentHandler('AnswerYesOrNo', requiredState="InquireAttendee", isProtected = True)
+	def attendeeThere(self, session: DialogSession, **_kwargs):
+		answer = session.slots.get('Answer')
+		self.logInfo(f'yes no response: {answer}')
