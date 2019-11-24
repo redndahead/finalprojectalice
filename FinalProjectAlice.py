@@ -78,5 +78,6 @@ class FinalProjectAlice(Module):
 
 	@IntentHandler('NextMeeting')
 	def nextMeeting(self, session: DialogSession, **_kwargs):
+		eventList = json.loads(self.getConfig('eventList'))
 
-		self.endDialog(session.sessionId, f'Test')
+		self.endDialog(session.sessionId, f'Event: {eventList[1]["summary"]}')
