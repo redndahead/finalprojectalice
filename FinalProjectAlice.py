@@ -43,7 +43,8 @@ class FinalProjectAlice(Module):
 		all_events = cronofy.read_events(calendar_ids=(calendarID,),
 										 from_date=from_date,
 										 to_date=to_date,
-										 tzid=timezone_id
+										 tzid=timezone_id,
+										 localized_times=True
 										 ).all()
 
 		self.updateConfig(key="eventList", value=json.dumps(all_events))
@@ -79,5 +80,7 @@ class FinalProjectAlice(Module):
 	@IntentHandler('NextMeeting')
 	def nextMeeting(self, session: DialogSession, **_kwargs):
 		eventList = json.loads(self.getConfig('eventList'))
+		eventOutput = json.dumps(eventList[1])
+		self.logInfo(f'event2: {eventOutput}')
 
 		self.endDialog(session.sessionId, f'Event: {eventList[1]["summary"]}')
