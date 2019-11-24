@@ -82,6 +82,17 @@ class FinalProjectAlice(Module):
 		eventList = json.loads(self.getConfig('eventList'))
 		eventOutput = json.dumps(eventList[1])
 		self.logInfo(f'event2: {eventOutput}')
-		time = datetime.datetime.strptime(eventList[1]["start"]["time"], "%H:%M")
+		date = datetime.fromisoformat(eventList[1]["start"]["time"], "%H:%M")
+		time = date.hour
+		ampm = "a m"
+		if date.hour > 12:
+			ampm = "p m"
+			time = date.hour - 12
+
+		if date.minute > 0:
+			time = time + ' ' + date.minute
+
+		time = time + ' ' + ampm
+
 		self.logInfo(f'time2: {time}')
 		self.endDialog(session.sessionId, f'Event: {eventList[1]["summary"]}')
