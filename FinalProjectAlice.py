@@ -1,6 +1,6 @@
 import json
 import pycronofy
-import datetime
+from datetime import datetime
 
 from core.base.model.Module import Module
 from core.dialog.model.DialogSession import DialogSession
