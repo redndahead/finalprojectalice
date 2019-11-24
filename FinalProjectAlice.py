@@ -82,13 +82,20 @@ class FinalProjectAlice(Module):
 		eventList = json.loads(self.getConfig('eventList'))
 		eventOutput = json.dumps(eventList[1])
 		self.logInfo(f'event2: {eventOutput}')
+
+		event = eventList[1]
 		givenDate, givenTime = eventList[1]["start"]["time"].split("T")
 		hour, minute, junk = givenTime.split(":", 2)
+
 		time = hour
-		ampm = "a m"
-		if int(hour) > 12:
-			ampm = "p m"
+		if int(hour) == 0:
+			time = "12"
+		elif (int(hour) > 12):
 			time = str(int(hour) - 12)
+
+		ampm = "a m"
+		if int(hour) >= 12:
+			ampm = "p m"
 
 		if int(minute) > 0:
 			time = time + ' ' + minute
@@ -96,4 +103,4 @@ class FinalProjectAlice(Module):
 		time = time + ' ' + ampm
 
 		self.logInfo(f'time2: {time}')
-		self.endDialog(session.sessionId, f'Event: {eventList[1]["summary"]}')
+		self.endDialog(session.sessionId, f'The next event is {event["summary"]}. It will begin at {time}')
