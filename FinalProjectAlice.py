@@ -86,11 +86,11 @@ class FinalProjectAlice(Module):
 		hour, minute, junk = givenTime.split(":", 2)
 		time = hour
 		ampm = "a m"
-		if hour > 12:
+		if int(hour) > 12:
 			ampm = "p m"
-			time = hour - 12
+			time = str(int(hour) - 12)
 
-		if minute > 0:
+		if int(minute) > 0:
 			time = time + ' ' + minute
 
 		time = time + ' ' + ampm
