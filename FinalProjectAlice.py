@@ -31,7 +31,7 @@ class FinalProjectAlice(Module):
 
 	def onBooted(self):
 		self.loadCalendar()
-		self.askQuestion()
+		#self.askQuestion()
 
 	def loadCalendar(self):
 		key = self.getConfig('cronofykey')
