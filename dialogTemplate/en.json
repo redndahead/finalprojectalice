@@ -33,7 +33,8 @@
                 "{yeah:=>Answer}",
                 "{yep:=>Answer}",
                 "{no:=>Answer}",
-                "{yes:=>Answer}"
+                "{yes:=>Answer}",
+                "work please"
 			],
             "slots": [
                 {
