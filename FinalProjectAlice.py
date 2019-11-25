@@ -14,7 +14,7 @@ class FinalProjectAlice(Module):
 	Description: Takes care of final project
 	"""
 
-	_INTENT_ATTENDEE_THERE = Intent('AttendeeThere', isProtected=True)
+	_INTENT_ATTENDEE_THERE = Intent('AttendeeThere')
 
 	def __init__(self):
 		self._SUPPORTED_INTENTS	= [
@@ -103,7 +103,7 @@ class FinalProjectAlice(Module):
 	def askQuestion(self):
 		self.ask(
 			text = "Are the attendee's there?",
-			intentFilter=[Intent("AttendeeThere").justTopic]
+			intentFilter=[self._INTENT_ATTENDEE_THERE]
 		)
 
 	@IntentHandler('NextMeeting')
