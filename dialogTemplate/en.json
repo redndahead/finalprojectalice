@@ -18,6 +18,32 @@
                 "next meeting"
             ],
             "slots": []
+        },
+        {
+            "name": "AttendeeThere",
+            "description": "Check if attendee is there",
+            "enabledByDefault": false,
+            "utterances": [
+                "{not at all:=>Answer}",
+                "{sure:=>Answer}",
+                "{nope:=>Answer}",
+                "{no thank you:=>Answer}",
+                "{no thanks:=>Answer}",
+                "{yes please:=>Answer}",
+                "{yeah:=>Answer}",
+                "{yep:=>Answer}",
+                "{no:=>Answer}",
+                "{yes:=>Answer}"
+			],
+            "slots": [
+                {
+                    "name": "Answer",
+                    "description": null,
+                    "required": false,
+                    "type": "AnswerYesNo",
+                    "missingQuestion": ""
+                }
+            ]
         }
     ]
 }

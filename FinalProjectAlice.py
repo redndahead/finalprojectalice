@@ -14,7 +14,7 @@ class FinalProjectAlice(Module):
 	Description: Takes care of final project
 	"""
 
-	_INTENT_ANSWER_YES_OR_NO = Intent('AnswerYesOrNo', isProtected=True)
+	_INTENT_ATTENDEE_THERE = Intent('AttendeeThere', isProtected=True)
 
 	def __init__(self):
 		self._SUPPORTED_INTENTS	= [
@@ -103,8 +103,7 @@ class FinalProjectAlice(Module):
 	def askQuestion(self):
 		self.ask(
 			text = "Are the attendee's there?",
-			intentFilter=[self._INTENT_ANSWER_YES_OR_NO],
-			currentDialogState="InquireAttendee"
+			intentFilter=[self._INTENT_ATTENDEE_THERE]
 		)
 
 	@IntentHandler('NextMeeting')
@@ -119,7 +118,7 @@ class FinalProjectAlice(Module):
 		self.endDialog(session.sessionId, f'The next event is {event["summary"]}. It will begin at {time}')
 		self.askQuestion()
 
-	@IntentHandler(_INTENT_ANSWER_YES_OR_NO, requiredState="InquireAttendee")
+	@IntentHandler(_INTENT_ATTENDEE_THERE)
 	def attendeeThere(self, session: DialogSession, **_kwargs):
 		answer = session.slots.get('Answer')
 		self.logInfo(f'yes no response: {answer}')
