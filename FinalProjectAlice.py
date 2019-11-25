@@ -2,6 +2,7 @@ import json
 import pycronofy
 from datetime import datetime
 
+from core.base.model.Intent import Intent
 from core.base.model.Module import Module
 from core.dialog.model.DialogSession import DialogSession
 from core.util.Decorators import IntentHandler
@@ -12,6 +13,8 @@ class FinalProjectAlice(Module):
 	Author: Redndahead
 	Description: Takes care of final project
 	"""
+
+	_INTENT_ANSWER_YES_OR_NO = Intent('AnswerYesOrNo', isProtected=True)
 
 	def __init__(self):
 		self._SUPPORTED_INTENTS	= [
