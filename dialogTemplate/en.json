@@ -22,7 +22,7 @@
         {
             "name": "AttendeeThere",
             "description": "Check if attendee is there",
-            "enabledByDefault": false,
+            "enabledByDefault": true,
             "utterances": [
                 "{not at all:=>Answer}",
                 "{sure:=>Answer}",
