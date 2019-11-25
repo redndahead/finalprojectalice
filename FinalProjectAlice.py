@@ -118,7 +118,7 @@ class FinalProjectAlice(Module):
 		self.endDialog(session.sessionId, f'The next event is {event["summary"]}. It will begin at {time}')
 		self.askQuestion()
 
-	@IntentHandler(_INTENT_ATTENDEE_THERE)
+	@IntentHandler('AttendeeThere')
 	def attendeeThere(self, session: DialogSession, **_kwargs):
 		answer = session.slots.get('Answer')
 		self.logInfo(f'yes no response: {answer}')
