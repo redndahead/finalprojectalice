@@ -117,6 +117,7 @@ class FinalProjectAlice(Module):
 		time = self.formatTimeToVoice(time=eventList[1]["start"]["time"])
 
 		self.endDialog(session.sessionId, f'The next event is {event["summary"]}. It will begin at {time}')
+		self.askQuestion()
 
 	@IntentHandler(_INTENT_ANSWER_YES_OR_NO, requiredState="InquireAttendee")
 	def attendeeThere(self, session: DialogSession, **_kwargs):
