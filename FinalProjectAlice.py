@@ -103,7 +103,7 @@ class FinalProjectAlice(Module):
 	def askQuestion(self):
 		self.ask(
 			text = "Are the attendee's there?",
-			intentFilter=[Intent("AttendeeThere"), Intent()]
+			intentFilter=[Intent("AttendeeThere").justTopic]
 		)
 
 	@IntentHandler('NextMeeting')
