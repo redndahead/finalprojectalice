@@ -45,6 +45,21 @@
                     "missingQuestion": ""
                 }
             ]
+        },
+        {
+            "name": "DanceDebug",
+            "description": "Don't know if this will work",
+            "enabledByDefault": true,
+            "utterances": [
+                "how do you dance",
+                "can you dance",
+                "do you dance",
+                "what is your favorite dance",
+                "do you like to dance ",
+                "why dance fool",
+                "do you dance at all"
+            ],
+            "slots": []
         }
     ]
 }

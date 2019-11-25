@@ -103,7 +103,7 @@ class FinalProjectAlice(Module):
 	def askQuestion(self):
 		self.ask(
 			text = "Are the attendee's there?",
-			intentFilter=[Intent("AttendeeThere")]
+			intentFilter=[Intent("AttendeeThere"), Intent()]
 		)
 
 	@IntentHandler('NextMeeting')
@@ -122,3 +122,7 @@ class FinalProjectAlice(Module):
 	def attendeeThere(self, session: DialogSession, **_kwargs):
 		answer = session.slots.get('Answer')
 		self.logInfo(f'yes no response: {answer}')
+
+	@IntentHandler('DanceDebug')
+	def danceDebug(self, session:DialogSession, **_kwargs):
+		self.logInfo(f'god I hope this works.')
