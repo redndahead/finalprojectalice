@@ -118,8 +118,11 @@ class FinalProjectAlice(Module):
 
 	@IntentHandler('AttendeeThere')
 	def attendeeThere(self, session: DialogSession, **_kwargs):
-		answer = session.slots.get('Answer')
-		self.logInfo(f'yes no response: {answer}')
+		response = "no"
+		if self.Commons.isYes(session):
+			response = "yes"
+			
+		self.logInfo(f'yes no response: {response}')
 
 	@IntentHandler('DanceDebug')
 	def danceDebug(self, session:DialogSession, **_kwargs):
