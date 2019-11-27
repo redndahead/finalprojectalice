@@ -98,13 +98,22 @@ class FinalProjectAlice(Module):
 	@IntentHandler('NextMeeting')
 	def nextMeeting(self, session: DialogSession, **_kwargs):
 		eventList = json.loads(self.getConfig('eventList'))
-		eventOutput = json.dumps(eventList[1])
+		timezone_id = 'US/Pacific'
+
+		tz = pytz.timezone(timezone_id)
+		now = datetime.now(tz=tz)
+		nextEvent = {}
+		for event in eventList:
+			event_start = datetime.strptime(event["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+			if event_start > now:
+				nextEvent = event
+				break
+		eventOutput = json.dumps(nextEvent)
 		self.logInfo(f'event2: {eventOutput}')
 
-		event = eventList[1]
-		time = self.formatTimeToVoice(time=eventList[1]["start"]["time"])
+		time = self.formatTimeToVoice(time=nextEvent["start"]["time"])
 
-		self.endDialog(session.sessionId, f'The next event is {event["summary"]}. It will begin at {time}')
+		self.endDialog(session.sessionId, f'The next event is {nextEvent["summary"]}. It will begin at {time}')
 		self.askQuestion()
 
 	@IntentHandler('AttendeeThere')
