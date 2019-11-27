@@ -1,6 +1,6 @@
 import json
 import pycronofy
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from core.base.model.Intent import Intent
 from core.base.model.Module import Module
@@ -34,14 +34,21 @@ class FinalProjectAlice(Module):
 		#self.askQuestion()
 
 	def loadCalendar(self):
+		refresh_time = self.getConfig('refreshTime')
+		self.ThreadManager.doLater(interval=refresh_time, func=self.loadCalendar)
+		self.logInfo(f'Scheduled next calendar load in {refresh_time} seconds')
+
 		key = self.getConfig('cronofykey')
 		self.logInfo(f'key: {key}')
 		calendarID = self.getConfig('calendarID')
 		self.logInfo(f'calendarID: {calendarID}')
 		cronofy = pycronofy.Client(access_token=key)
 
-		from_date = '2019-11-22'
-		to_date = '2019-11-24'
+		today = datetime.now()
+		from_date = today.strftime("%Y-%m-%d")
+		two_days = today + timedelta(days=2)
+		to_date = two_days.strftime("%Y-%m-%d")
+
 		timezone_id = 'US/Pacific'
 
 		all_events = cronofy.read_events(calendar_ids=(calendarID,),
