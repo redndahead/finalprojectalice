@@ -39,14 +39,12 @@ class FinalProjectAlice(Module):
 		self.logInfo(f'Scheduled next calendar load in {refresh_time} seconds')
 
 		key = self.getConfig('cronofykey')
-		self.logInfo(f'key: {key}')
 		calendarID = self.getConfig('calendarID')
-		self.logInfo(f'calendarID: {calendarID}')
 		cronofy = pycronofy.Client(access_token=key)
 
-		today = datetime.now()
-		from_date = today.strftime("%Y-%m-%d")
-		two_days = today + timedelta(days=2)
+		now = datetime.now()
+		from_date = now.strftime("%Y-%m-%d")
+		two_days = now + timedelta(days=2)
 		to_date = two_days.strftime("%Y-%m-%d")
 
 		timezone_id = 'US/Pacific'
@@ -58,35 +56,13 @@ class FinalProjectAlice(Module):
 										 localized_times=True
 										 ).all()
 
-		self.updateConfig(key="eventList", value=json.dumps(all_events))
+		event_list = []
+		for event in all_events:
+			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+			if event_end > now:
+				event_list.append(event)
 
-	def randomlySpeak(self, init: bool = False):
-		rnd = self.getConfig('refreshTime')
-		#self.ThreadManager.doLater(interval=rnd, func=self.randomlySpeak)
-		#self.logInfo(f'Scheduled next random speaking in {rnd} seconds')
-
-		key = self.getConfig('cronofykey')
-		self.logInfo(f'key: {key}')
-		calendarID = self.getConfig('calendarID')
-		self.logInfo(f'calendarID: {calendarID}')
-		cronofy = pycronofy.Client(access_token=key)
-
-		from_date = '2019-11-22'
-		to_date = '2019-11-24'
-		timezone_id = 'US/Pacific'
-
-		#all_events = cronofy.read_events(calendar_ids=(calendarID,),
-		#								 from_date=from_date,
-		#								 to_date=to_date,
-		#								 tzid=timezone_id
-		#								 ).all()
-
-		#eventsOutput = json.dumps(all_events)
-		#self.logInfo(f'Calendar: {eventsOutput}')
-
-		#for event in all_events:
-		#	self.logInfo(f'{event["summary"]}')
-		#	self.say(f'Event name: {event["summary"]}. Event Start: {event["start"]}')
+		self.updateConfig(key="eventList", value=json.dumps(event_list))
 
 	def formatTimeToVoice(self, time=''):
 		date = datetime.strptime(time, "%Y-%m-%dT%H:%M:%S%z")
