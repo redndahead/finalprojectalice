@@ -1,6 +1,7 @@
 import json
 import pycronofy
 from datetime import datetime, timedelta
+import pytz
 
 from core.base.model.Intent import Intent
 from core.base.model.Module import Module
@@ -42,12 +43,15 @@ class FinalProjectAlice(Module):
 		calendarID = self.getConfig('calendarID')
 		cronofy = pycronofy.Client(access_token=key)
 
-		now = datetime.now()
+		timezone_id = 'US/Pacific'
+
+		tz = pytz.timezone(timezone_id)
+		now = datetime.now(tz=tz)
 		from_date = now.strftime("%Y-%m-%d")
 		two_days = now + timedelta(days=2)
 		to_date = two_days.strftime("%Y-%m-%d")
 
-		timezone_id = 'US/Pacific'
+
 
 		all_events = cronofy.read_events(calendar_ids=(calendarID,),
 										 from_date=from_date,
