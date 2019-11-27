@@ -59,7 +59,9 @@ class FinalProjectAlice(Module):
 		event_list = []
 		for event in all_events:
 			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+			self.logInfo(f'Event: {event["summary"]}')
 			if event_end > now:
+				self.logInfo(f'Added')
 				event_list.append(event)
 
 		self.updateConfig(key="eventList", value=json.dumps(event_list))
