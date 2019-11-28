@@ -111,9 +111,12 @@ class FinalProjectAlice(Module):
 		eventOutput = json.dumps(nextEvent)
 		self.logInfo(f'event2: {eventOutput}')
 
-		time = self.formatTimeToVoice(time=nextEvent["start"]["time"])
+		if not nextEvent:
+			self.endDialog(session.sessionId, f'No events are scheduled.')
+		else:
+			time = self.formatTimeToVoice(time=nextEvent["start"]["time"])
+			self.endDialog(session.sessionId, f'The next event is {nextEvent["summary"]}. It will begin at {time}')
 
-		self.endDialog(session.sessionId, f'The next event is {nextEvent["summary"]}. It will begin at {time}')
 		self.askQuestion()
 
 	@IntentHandler('AttendeeThere')
