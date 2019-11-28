@@ -32,7 +32,8 @@ class FinalProjectAlice(Module):
 
 	def onBooted(self):
 		self.loadCalendar()
-		#self.askQuestion()
+		self.updateConfig(key="hasVerified", value=False)
+		self.checkVerification()
 
 	def loadCalendar(self):
 		refresh_time = self.getConfig('refreshTime')
@@ -70,6 +71,27 @@ class FinalProjectAlice(Module):
 
 		self.updateConfig(key="eventList", value=json.dumps(event_list))
 
+	def checkVerification(self):
+		verification = self.getConfig('verification')
+		eventList = json.loads(self.getConfig('eventList'))
+		timezone_id = 'US/Pacific'
+
+		tz = pytz.timezone(timezone_id)
+		now = datetime.now(tz=tz)
+		nextEvent = {}
+		event_start = datetime.strptime('2100-01-01T23:59:59-08:00')
+		for event in eventList:
+			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+			if event_end > now:
+				nextEvent = event
+				break
+
+		if nextEvent and not verification and event_start <= now:
+			# Prompt
+			self.askQuestion(event)
+
+
+
 	def formatTimeToVoice(self, time=''):
 		date = datetime.strptime(time, "%Y-%m-%dT%H:%M:%S%z")
 
@@ -89,10 +111,13 @@ class FinalProjectAlice(Module):
 		time = time + ' ' + ampm
 		return time
 
-	def askQuestion(self):
+	def askQuestion(self, event: {}):
 		self.ask(
-			text = "Are the attendee's there?",
-			intentFilter=[self._INTENT_ATTENDEE_THERE]
+			text = f'The meeting {event["summary"]} should have begun. Are the attendee\'s here?',
+			intentFilter=[self._INTENT_ATTENDEE_THERE],
+			customData={
+				'EventID': event['event_uid']
+			}
 		)
 
 	@IntentHandler('NextMeeting')
@@ -117,13 +142,19 @@ class FinalProjectAlice(Module):
 			time = self.formatTimeToVoice(time=nextEvent["start"]["time"])
 			self.endDialog(session.sessionId, f'The next event is {nextEvent["summary"]}. It will begin at {time}')
 
-		self.askQuestion()
+		self.askQuestion(nextEvent)
 
 	@IntentHandler('AttendeeThere')
 	def attendeeThere(self, session: DialogSession, **_kwargs):
+
+		self.logInfo(json.dumps(session))
 		response = "no"
 		if self.Commons.isYes(session):
 			response = "yes"
+			# TODO: Get actual eventID
+			self.updateConfig(key="verification", value='event_id')
+		else:
+			self.ThreadManager.doLater(interval=60, func=self.checkVerification())
 
 		self.logInfo(f'yes no response: {response}')
 
