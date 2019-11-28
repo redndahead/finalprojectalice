@@ -121,7 +121,7 @@ class FinalProjectAlice(Module):
 		response = "no"
 		if self.Commons.isYes(session):
 			response = "yes"
-			
+
 		self.logInfo(f'yes no response: {response}')
 
 	@IntentHandler('DanceDebug')
