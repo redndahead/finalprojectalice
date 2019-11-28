@@ -84,9 +84,10 @@ class FinalProjectAlice(Module):
 			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
 			if event_end > now:
 				nextEvent = event
+				event_start = datetime.strptime(event["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
 				break
 
-		if nextEvent and not verification and event_start <= now:
+		if nextEvent and event_start <= now and nextEvent['event_uid'] != verification:
 			# Prompt
 			self.askQuestion(event)
 
@@ -146,13 +147,11 @@ class FinalProjectAlice(Module):
 
 	@IntentHandler('AttendeeThere')
 	def attendeeThere(self, session: DialogSession, **_kwargs):
-		#object_methods = dir(session)
-		self.logInfo(json.dumps(session.customData))
 		response = "no"
 		if self.Commons.isYes(session):
 			response = "yes"
-			# TODO: Get actual eventID
-			self.updateConfig(key="verification", value='event_id')
+			self.updateConfig(key="verification", value=session.customData["EventID"])
+			self.say(f'Thank you enjoy your meeting.')
 		else:
 			self.ThreadManager.doLater(interval=60, func=self.checkVerification())
 
