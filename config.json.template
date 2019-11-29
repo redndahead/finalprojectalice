@@ -19,11 +19,6 @@
 		"dataType": "string",
 		"description": "List of events on this device."
 	},
-	"verification": {
-		"defaultValue": false,
-		"dataType": "boolean",
-		"description": "Is the event in verification mode."
-	},
 	"lastVerifiedEventID": {
 		"defaultValue": "",
 		"dataType": "string",

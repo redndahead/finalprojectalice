@@ -74,7 +74,6 @@ class FinalProjectAlice(Module):
 	def checkVerification(self):
 		self.logInfo('Checking for verification.')
 
-		verification = self.getConfig('verification')
 		lastVerifiedEventID = self.getConfig('lastVerifiedEventID')
 
 		eventList = json.loads(self.getConfig('eventList'))
@@ -92,17 +91,14 @@ class FinalProjectAlice(Module):
 		currentEventOutput = json.dumps(currentEvent)
 		self.logInfo(f'currentEvent: {currentEventOutput}')
 		self.logInfo(f'lastVerifiedEventID: {lastVerifiedEventID}')
-		self.logInfo(f'verification: {verification}')
 
 		# Verification Required
-		if currentEvent and lastVerifiedEventID != currentEvent["event_uid"] and verification:
-			self.updateConfig(key="verification", value=True)
+		if currentEvent and lastVerifiedEventID != currentEvent["event_uid"]:
 			self.askQuestion(currentEvent)
 		# No verification Required
 		else:
 			# Always loop this function.
 			self.ThreadManager.doLater(interval=60, func=self.checkVerification)
-			self.updateConfig(key="verification", value=False)
 
 
 	def formatTimeToVoice(self, time=''):
@@ -163,7 +159,6 @@ class FinalProjectAlice(Module):
 		response = "no"
 		if self.Commons.isYes(session):
 			response = "yes"
-			self.updateConfig(key="verification", value=False)
 			self.updateConfig(key="lastVerifiedEventID", value=session.customData["EventID"])
 			self.say(f'Thank you enjoy your meeting.')
 		else:
