@@ -89,6 +89,10 @@ class FinalProjectAlice(Module):
 			if event_start <= now and event_end > now:
 				currentEvent = event
 				break
+		currentEventOutput = json.dumps(currentEvent)
+		self.logInfo(f'currentEvent: {currentEventOutput}')
+		self.logInfo(f'lastVerifiedEventID: {lastVerifiedEventID}')
+		self.logInfo(f'verification: {verification}')
 
 		# Verification Required
 		if currentEvent and lastVerifiedEventID != currentEvent["event_uid"] and verification:
