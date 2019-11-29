@@ -155,7 +155,7 @@ class FinalProjectAlice(Module):
 			self.updateConfig(key="verification", value=session.customData["EventID"])
 			self.say(f'Thank you enjoy your meeting.')
 		else:
-			self.ThreadManager.doLater(interval=60, func=self.checkVerification())
+			self.ThreadManager.doLater(interval=60, func=self.checkVerification)
 
 		self.logInfo(f'yes no response: {response}')
 
