@@ -72,6 +72,7 @@ class FinalProjectAlice(Module):
 		self.updateConfig(key="eventList", value=json.dumps(event_list))
 
 	def checkVerification(self):
+		self.info('Checking for verification.')
 		verification = self.getConfig('verification')
 		eventList = json.loads(self.getConfig('eventList'))
 		timezone_id = 'US/Pacific'
