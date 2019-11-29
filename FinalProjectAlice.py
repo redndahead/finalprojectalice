@@ -147,6 +147,7 @@ class FinalProjectAlice(Module):
 
 	@IntentHandler('AttendeeThere')
 	def attendeeThere(self, session: DialogSession, **_kwargs):
+		self.endSession(session.sessionId)
 		response = "no"
 		if self.Commons.isYes(session):
 			response = "yes"
