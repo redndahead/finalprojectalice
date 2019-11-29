@@ -25,7 +25,7 @@
 		"description": "Is the event in verification mode."
 	},
 	"lastVerifiedEventID": {
-		"defaultValue": false,
+		"defaultValue": "",
 		"dataType": "string",
 		"description": "Last event that was verified."
 	}
