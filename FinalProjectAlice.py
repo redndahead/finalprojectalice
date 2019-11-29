@@ -73,25 +73,32 @@ class FinalProjectAlice(Module):
 
 	def checkVerification(self):
 		self.logInfo('Checking for verification.')
+
 		verification = self.getConfig('verification')
+		lastVerifiedEventID = self.getConfig('lastVerifiedEventID')
+
 		eventList = json.loads(self.getConfig('eventList'))
 		timezone_id = 'US/Pacific'
 
 		tz = pytz.timezone(timezone_id)
 		now = datetime.now(tz=tz)
-		nextEvent = {}
-		event_start = datetime.strptime('2100-01-01T23:59:59-08:00', "%Y-%m-%dT%H:%M:%S%z")
+		currentEvent = {}
 		for event in eventList:
+			event_start = datetime.strptime(event["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
 			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
-			if event_end > now:
-				nextEvent = event
-				event_start = datetime.strptime(event["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+			if event_start <= now and event_end > now:
+				currentEvent = event
 				break
 
-		if nextEvent and event_start <= now and nextEvent['event_uid'] != verification:
-			# Prompt
-			self.askQuestion(event)
-
+		# Verification Required
+		if currentEvent and lastVerifiedEventID != currentEvent["event_uid"] and verification:
+			self.updateConfig(key="verification", value=True)
+			self.askQuestion(currentEvent)
+		# No verification Required
+		else:
+			# Always loop this function.
+			self.ThreadManager.doLater(interval=60, func=self.checkVerification)
+			self.updateConfig(key="verification", value=False)
 
 
 	def formatTimeToVoice(self, time=''):
@@ -152,10 +159,11 @@ class FinalProjectAlice(Module):
 		response = "no"
 		if self.Commons.isYes(session):
 			response = "yes"
-			self.updateConfig(key="verification", value=session.customData["EventID"])
+			self.updateConfig(key="verification", value=False)
 			self.say(f'Thank you enjoy your meeting.')
 		else:
-			self.ThreadManager.doLater(interval=60, func=self.checkVerification)
+			self.ThreadManager.doLater(interval=10, func=self.checkVerification)
+
 
 		self.logInfo(f'yes no response: {response}')
 

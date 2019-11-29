@@ -20,8 +20,8 @@
 		"description": "List of events on this device."
 	},
 	"verification": {
-		"defaultValue": "",
-		"dataType": "string",
-		"description": "Determines if the event has been verified."
+		"defaultValue": false,
+		"dataType": "boolean",
+		"description": "Is the event in verification mode."
 	}
 }
