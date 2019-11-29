@@ -79,7 +79,7 @@ class FinalProjectAlice(Module):
 		tz = pytz.timezone(timezone_id)
 		now = datetime.now(tz=tz)
 		nextEvent = {}
-		event_start = datetime.strptime('2100-01-01T23:59:59-08:00')
+		event_start = datetime.strptime('2100-01-01T23:59:59-08:00', "%Y-%m-%dT%H:%M:%S%z")
 		for event in eventList:
 			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
 			if event_end > now:
