@@ -23,7 +23,7 @@
 		"defaultValue": false,
 		"dataType": "boolean",
 		"description": "Is the event in verification mode."
-	}
+	},
 	"lastVerifiedEventID": {
 		"defaultValue": false,
 		"dataType": "string",
