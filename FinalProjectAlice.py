@@ -38,10 +38,7 @@ class FinalProjectAlice(Module):
 		self.logInfo(f'Status Code: {response.status_code}')
 		if response.ok:
 			self.logInfo(f'Response: {response.content}')
-			config = response.json
-			configOutput = json.dumps(config)
-			self.logInfo(f'Configuration: {configOutput}')
-			self.logInof(f'Config: {config}')
+			config = json.loads(response.content)
 			if config == {}:
 				self.setConfig(name=config['Name'], calendarID=config['CalendarID'], verificationWaitTime=config['VerificationWaitTime'], verificationMaxCount=config['VerificationMaxCount'])
 				self.loadCalendar()
