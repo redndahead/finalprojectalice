@@ -162,7 +162,8 @@ class FinalProjectAlice(Module):
 			self.say(f'Thank you enjoy your meeting.')
 			self.ThreadManager.doLater(interval=60, func=self.checkVerification)
 		else:
-			verification_count = self.getConfig('verificationCount') + 1
+			verification_count = self.getConfig('verificationCount')
+			verification_count = verification_count + 1
 			verification_max_count = self.getConfig('verificationMaxCount')
 
 			if verification_count == verification_max_count:
