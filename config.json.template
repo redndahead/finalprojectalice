@@ -27,16 +27,19 @@
 	"eventList": {
 		"defaultValue": "",
 		"dataType": "string",
-		"description": "List of events on this device."
+		"description": "List of events on this device.",
+		"display": "hidden"
 	},
 	"lastVerifiedEventID": {
 		"defaultValue": "",
 		"dataType": "string",
-		"description": "Last event that was verified."
+		"description": "Last event that was verified.",
+		"display": "hidden"
 	},
 	"verificationCount": {
 		"defaultValue": 0,
 		"dataType": "integer",
-		"description": "The number of times asked."
+		"description": "The number of times asked.",
+		"display": "hidden"
 	}
 }
