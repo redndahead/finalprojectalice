@@ -36,7 +36,7 @@ class FinalProjectAlice(Module):
 		self.checkVerification()
 
 	def loadCalendar(self):
-		calendar_refresh_time = self.getConfig('calendarRefreshTime')
+		calendar_refresh_time = int(self.getConfig('calendarRefreshTime'))
 		self.ThreadManager.doLater(interval=calendar_refresh_time, func=self.loadCalendar)
 		self.logInfo(f'Scheduled next calendar load in {calendar_refresh_time} seconds')
 
@@ -163,7 +163,7 @@ class FinalProjectAlice(Module):
 		else:
 			self.logInfo(f'User responded no.')
 			verification_count = int(self.getConfig('verificationCount')) + 1
-			verification_max_count = self.getConfig('verificationMaxCount')
+			verification_max_count = int(self.getConfig('verificationMaxCount'))
 
 			if verification_count == verification_max_count:
 				# Release the room
@@ -175,7 +175,7 @@ class FinalProjectAlice(Module):
 			else:
 				self.logInfo(f'Max count not reached.')
 				self.updateConfig(key="verificationCount", value=verification_count)
-				verification_wait_time = self.getConfig('verificationWaitTime')
+				verification_wait_time = int(self.getConfig('verificationWaitTime'))
 				self.ThreadManager.doLater(interval=verification_wait_time, func=self.checkVerification)
 
 
