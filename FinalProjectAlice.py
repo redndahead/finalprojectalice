@@ -37,14 +37,15 @@ class FinalProjectAlice(Module):
 		response = requests.get(f'https://cxweif56vl.execute-api.us-west-2.amazonaws.com/prod/endpoint/{serial}/config')
 		self.logInfo(f'Status Code: {response.status_code}')
 		if response.ok:
-			self.logInfo(f'Response: {response.content}')
-			config = response.json
+			if response.json:
+				self.logInfo(f'Response: {response.content}')
+				config = response.json
 
-			self.loadCalendar()
-			self.updateConfig(key="verificationCount", value=0)
-			self.checkVerification()
-		else:
-			self.say(f'The serial number is {serial}')
+				self.loadCalendar()
+				self.updateConfig(key="verificationCount", value=0)
+				self.checkVerification()
+			else:
+				self.say(f'The serial number is {serial}')
 
 	def loadCalendar(self):
 		calendar_refresh_time = int(self.getConfig('calendarRefreshTime'))
