@@ -171,6 +171,7 @@ class FinalProjectAlice(Module):
 				self.logInfo(f'Room has been released. EventID: {session.customData["EventID"]}')
 				self.updateConfig(key="lastVerifiedEventID", value=session.customData["EventID"])
 				self.updateConfig(key="verificationCount", value=0)
+				self.ThreadManager.doLater(interval=60, func=self.checkVerification)
 			else:
 				self.logInfo(f'Max count not reached.')
 				self.updateConfig(key="verificationCount", value=verification_count)
