@@ -39,14 +39,23 @@ class FinalProjectAlice(Module):
 		if response.ok:
 			self.logInfo(f'Response: {response.content}')
 			config = response.json
+			configOutput = json.dumps(config)
+			self.logInfo(f'Configuration: {configOutput}')
+			self.logInof(f'Config: {config}')
 			if config == {}:
-				self.logInfo('Configuration exists')
+				self.setConfig(name=config['Name'], calendarID=config['CalendarID'], verificationWaitTime=config['VerificationWaitTime'], verificationMaxCount=config['VerificationMaxCount'])
 				self.loadCalendar()
 				self.updateConfig(key="verificationCount", value=0)
 				self.checkVerification()
 			else:
 				self.logInfo(f'No Configuration')
 				self.say(f'The serial number is {serial}')
+
+	def setConfig(self, name: str, calendarID: str, verificationWaitTime: int, verificationMaxCount: int):
+		self.updateConfig(key="name", value=name)
+		self.updateConfig(key="calendarID", value=calendarID)
+		self.updateConfig(key="verificationWaitTime", value=verificationWaitTime)
+		self.updateConfig(key="verificationMaxCount", value=verificationMaxCount)
 
 	def loadCalendar(self):
 		calendar_refresh_time = int(self.getConfig('calendarRefreshTime'))
