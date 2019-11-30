@@ -179,6 +179,7 @@ class FinalProjectAlice(Module):
 
 			if verification_count == verification_max_count:
 				# Release the room
+				self.deleteEvent(eventID=session.customData["EventID"])
 				self.logInfo(f'Max count reached.')
 				self.logInfo(f'Room has been released. EventID: {session.customData["EventID"]}')
 				self.updateConfig(key="lastVerifiedEventID", value=session.customData["EventID"])
@@ -189,8 +190,6 @@ class FinalProjectAlice(Module):
 				self.updateConfig(key="verificationCount", value=verification_count)
 				verification_wait_time = int(self.getConfig('verificationWaitTime'))
 				self.ThreadManager.doLater(interval=verification_wait_time, func=self.checkVerification)
-
-
 
 	@IntentHandler('DanceDebug')
 	def danceDebug(self, session:DialogSession, **_kwargs):
@@ -231,3 +230,9 @@ class FinalProjectAlice(Module):
 
 		time = time + ' ' + ampm
 		return time
+
+	def deleteEvent(self, eventID: str):
+		key = self.getConfig('cronofykey')
+		calendarID = self.getConfig('calendarID')
+		cronofy = pycronofy.Client(access_token=key)
+		cronofy.delete_event(calendar_id=calendarID, event_id=eventID)
