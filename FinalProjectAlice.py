@@ -36,9 +36,9 @@ class FinalProjectAlice(Module):
 		self.checkVerification()
 
 	def loadCalendar(self):
-		refresh_time = self.getConfig('refreshTime')
-		self.ThreadManager.doLater(interval=refresh_time, func=self.loadCalendar)
-		self.logInfo(f'Scheduled next calendar load in {refresh_time} seconds')
+		calendar_refresh_time = self.getConfig('calendarRefreshTime')
+		self.ThreadManager.doLater(interval=calendar_refresh_time, func=self.loadCalendar)
+		self.logInfo(f'Scheduled next calendar load in {calendar_refresh_time} seconds')
 
 		key = self.getConfig('cronofykey')
 		calendarID = self.getConfig('calendarID')
@@ -97,7 +97,6 @@ class FinalProjectAlice(Module):
 			self.askQuestion(currentEvent)
 		# No verification Required
 		else:
-			# Always loop this function.
 			self.ThreadManager.doLater(interval=60, func=self.checkVerification)
 
 
@@ -163,8 +162,18 @@ class FinalProjectAlice(Module):
 			self.say(f'Thank you enjoy your meeting.')
 			self.ThreadManager.doLater(interval=60, func=self.checkVerification)
 		else:
-			self.ThreadManager.doLater(interval=10, func=self.checkVerification)
+			verification_count = self.getConfig('verificationCount') + 1
+			verification_max_count = self.getConfig('verificationMaxCount')
 
+			if verification_count == verification_max_count:
+				# Release the room
+				self.logInfo(f'Room has been released. EventID: {session.customData["EventID"]}')
+				self.updateConfig(key="lastVerifiedEventID", value=session.customData["EventID"])
+				self.updateConfig(key="verificationCount", value=0)
+			else:
+				self.updateConfig(key="verificationCount", value=verification_count)
+				verification_wait_time = self.getConfig('verificationWaitTime')
+				self.ThreadManager.doLater(interval=verification_wait_time, func=self.checkVerification)
 
 		self.logInfo(f'yes no response: {response}')
 

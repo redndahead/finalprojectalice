@@ -4,10 +4,20 @@
 		"dataType": "string",
 		"description": "Key for cronofy"
 	},
-	"refreshTime": {
-		"defaultValue": 100,
+	"verificationWaitTime": {
+		"defaultValue": 300,
 		"dataType": "integer",
-		"description": "Refresh Time"
+		"description": "The time to wait in between verifications."
+	},
+	"verificationMaxCount": {
+		"defaultValue": 3,
+		"dataType": "integer",
+		"description": "The maximum number of times to ask."
+	},
+	"calendarRefreshTime": {
+		"defaultValue": 300,
+		"dataType": "integer",
+		"description": "The number of seconds between calendar refreshes."
 	},
 	"calendarID": {
 		"defaultValue": "",
@@ -23,5 +33,10 @@
 		"defaultValue": "",
 		"dataType": "string",
 		"description": "Last event that was verified."
+	},
+	"verificationCount": {
+		"defaultValue": 0,
+		"dataType": "integer",
+		"description": "The number of times asked."
 	}
 }
