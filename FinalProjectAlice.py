@@ -2,6 +2,7 @@ import json
 import pycronofy
 from datetime import datetime, timedelta
 import pytz
+import requests
 
 from core.base.model.Intent import Intent
 from core.base.model.Module import Module
@@ -31,9 +32,11 @@ class FinalProjectAlice(Module):
 		slots = session.slots
 
 	def onBooted(self):
-		self.loadCalendar()
-		self.updateConfig(key="verificationCount", value=0)
-		self.checkVerification()
+		serial = self.getserial()
+		self.logInfo(f'Serial Number: {serial}')
+		#self.loadCalendar()
+		#self.updateConfig(key="verificationCount", value=0)
+		#self.checkVerification()
 
 	def loadCalendar(self):
 		calendar_refresh_time = int(self.getConfig('calendarRefreshTime'))
@@ -93,7 +96,7 @@ class FinalProjectAlice(Module):
 			self.logInfo(f'currentEventID: {currentEvent["event_uid"]}, currentEventName: {currentEvent["summary"]}')
 		else:
 			self.logInfo(f'No current event.')
-			
+
 		self.logInfo(f'lastVerifiedEventID: {lastVerifiedEventID}')
 
 		# Verification Required
@@ -189,3 +192,20 @@ class FinalProjectAlice(Module):
 	@IntentHandler('DanceDebug')
 	def danceDebug(self, session:DialogSession, **_kwargs):
 		self.logInfo(f'god I hope this works.')
+
+	################################################
+	#		 		Utilities					   #
+	################################################
+	def getserial(self):
+		# Extract serial from cpuinfo file
+		cpuserial = "0000000000000000"
+		try:
+			f = open('/proc/cpuinfo', 'r')
+			for line in f:
+				if line[0:6] == 'Serial':
+					cpuserial = line[10:26]
+			f.close()
+		except:
+			cpuserial = "ERROR000000000"
+
+		return cpuserial
