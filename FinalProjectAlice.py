@@ -32,7 +32,7 @@ class FinalProjectAlice(Module):
 
 	def onBooted(self):
 		self.loadCalendar()
-		self.updateConfig(key="verification", value="")
+		self.updateConfig(key="verificationCount", value=0)
 		self.checkVerification()
 
 	def loadCalendar(self):
