@@ -19,6 +19,11 @@
 		"dataType": "integer",
 		"description": "The number of seconds between calendar refreshes."
 	},
+	"name": {
+		"defaultValue": "",
+		"dataType": "string",
+		"description": "The name given to the devic."
+	},
 	"calendarID": {
 		"defaultValue": "",
 		"dataType": "string",

@@ -34,9 +34,13 @@ class FinalProjectAlice(Module):
 	def onBooted(self):
 		serial = self.getserial()
 		self.logInfo(f'Serial Number: {serial}')
-		#self.loadCalendar()
-		#self.updateConfig(key="verificationCount", value=0)
-		#self.checkVerification()
+		name = self.getConfig('name')
+		if name:
+			self.loadCalendar()
+			self.updateConfig(key="verificationCount", value=0)
+			self.checkVerification()
+		else:
+			self.say(f'The serial number is {serial}')
 
 	def loadCalendar(self):
 		calendar_refresh_time = int(self.getConfig('calendarRefreshTime'))
@@ -106,26 +110,6 @@ class FinalProjectAlice(Module):
 		else:
 			self.ThreadManager.doLater(interval=60, func=self.checkVerification)
 
-
-	def formatTimeToVoice(self, time=''):
-		date = datetime.strptime(time, "%Y-%m-%dT%H:%M:%S%z")
-
-		time = str(date.hour)
-		if date.hour == 0:
-			time = "12"
-		elif date.hour > 12:
-			time = str(date.hour - 12)
-
-		ampm = "a m"
-		if date.hour >= 12:
-			ampm = "p m"
-
-		if date.minute > 0:
-			time = time + ' ' + str(date.minute)
-
-		time = time + ' ' + ampm
-		return time
-
 	def askQuestion(self, event: {}):
 		self.logInfo(f'Asking the question')
 		self.ask(
@@ -135,6 +119,10 @@ class FinalProjectAlice(Module):
 				'EventID': event['event_uid']
 			}
 		)
+
+	################################################
+	#		 		Intents						   #
+	################################################
 
 	@IntentHandler('NextMeeting')
 	def nextMeeting(self, session: DialogSession, **_kwargs):
@@ -209,3 +197,22 @@ class FinalProjectAlice(Module):
 			cpuserial = "ERROR000000000"
 
 		return cpuserial.lstrip("0").upper()
+
+	def formatTimeToVoice(self, time=''):
+		date = datetime.strptime(time, "%Y-%m-%dT%H:%M:%S%z")
+
+		time = str(date.hour)
+		if date.hour == 0:
+			time = "12"
+		elif date.hour > 12:
+			time = str(date.hour - 12)
+
+		ampm = "a m"
+		if date.hour >= 12:
+			ampm = "p m"
+
+		if date.minute > 0:
+			time = time + ' ' + str(date.minute)
+
+		time = time + ' ' + ampm
+		return time
