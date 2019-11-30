@@ -37,7 +37,7 @@ class FinalProjectAlice(Module):
 		response = requests.get(f'https://cxweif56vl.execute-api.us-west-2.amazonaws.com/prod/endpoint/{serial}/config')
 
 		if response.ok:
-			self.logInfo(f'Response: response.content')
+			self.logInfo(f'Response: {response.content}')
 			config = json.loads(response.content)
 
 			self.loadCalendar()
