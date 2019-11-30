@@ -120,6 +120,7 @@ class FinalProjectAlice(Module):
 		return time
 
 	def askQuestion(self, event: {}):
+		self.logInfo(f'Asking the question')
 		self.ask(
 			text = f'The meeting {event["summary"]} should have begun. Are the attendee\'s here?',
 			intentFilter=[self._INTENT_ATTENDEE_THERE],
@@ -154,6 +155,7 @@ class FinalProjectAlice(Module):
 
 	@IntentHandler('AttendeeThere')
 	def attendeeThere(self, session: DialogSession, **_kwargs):
+		self.logInfo(f'Answering the question.')
 		self.endSession(session.sessionId)
 		if self.Commons.isYes(session):
 			self.logInfo(f'User responded yes.')
