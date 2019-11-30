@@ -88,8 +88,8 @@ class FinalProjectAlice(Module):
 			if event_start <= now and event_end > now:
 				currentEvent = event
 				break
-		currentEventOutput = json.dumps(currentEvent)
-		self.logInfo(f'currentEvent: {currentEventOutput}')
+
+		self.logInfo(f'currentEventID: {currentEvent["event_uid"]}, currentEventName: {currentEvent["summary"]}')
 		self.logInfo(f'lastVerifiedEventID: {lastVerifiedEventID}')
 
 		# Verification Required
@@ -155,28 +155,30 @@ class FinalProjectAlice(Module):
 	@IntentHandler('AttendeeThere')
 	def attendeeThere(self, session: DialogSession, **_kwargs):
 		self.endSession(session.sessionId)
-		response = "no"
 		if self.Commons.isYes(session):
-			response = "yes"
+			self.logInfo(f'User responded yes.')
 			self.updateConfig(key="lastVerifiedEventID", value=session.customData["EventID"])
 			self.say(f'Thank you enjoy your meeting.')
 			self.ThreadManager.doLater(interval=60, func=self.checkVerification)
 		else:
+			self.logInfo(f'User responded no.')
 			verification_count = self.getConfig('verificationCount')
 			verification_count = verification_count + 1
 			verification_max_count = self.getConfig('verificationMaxCount')
 
 			if verification_count == verification_max_count:
 				# Release the room
+				self.logInfo(f'Max count reached.')
 				self.logInfo(f'Room has been released. EventID: {session.customData["EventID"]}')
 				self.updateConfig(key="lastVerifiedEventID", value=session.customData["EventID"])
 				self.updateConfig(key="verificationCount", value=0)
 			else:
+				self.logInfo(f'Max count not reached.')
 				self.updateConfig(key="verificationCount", value=verification_count)
 				verification_wait_time = self.getConfig('verificationWaitTime')
 				self.ThreadManager.doLater(interval=verification_wait_time, func=self.checkVerification)
 
-		self.logInfo(f'yes no response: {response}')
+
 
 	@IntentHandler('DanceDebug')
 	def danceDebug(self, session:DialogSession, **_kwargs):
