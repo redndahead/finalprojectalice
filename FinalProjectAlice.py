@@ -208,4 +208,4 @@ class FinalProjectAlice(Module):
 		except:
 			cpuserial = "ERROR000000000"
 
-		return cpuserial
+		return cpuserial.lstrip("0")
