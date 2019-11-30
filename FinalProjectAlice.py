@@ -162,8 +162,7 @@ class FinalProjectAlice(Module):
 			self.ThreadManager.doLater(interval=60, func=self.checkVerification)
 		else:
 			self.logInfo(f'User responded no.')
-			verification_count = self.getConfig('verificationCount')
-			verification_count = verification_count + 1
+			verification_count = int(self.getConfig('verificationCount')) + 1
 			verification_max_count = self.getConfig('verificationMaxCount')
 
 			if verification_count == verification_max_count:
