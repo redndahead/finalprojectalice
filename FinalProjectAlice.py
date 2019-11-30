@@ -89,7 +89,11 @@ class FinalProjectAlice(Module):
 				currentEvent = event
 				break
 
-		self.logInfo(f'currentEventID: {currentEvent["event_uid"]}, currentEventName: {currentEvent["summary"]}')
+		if currentEvent:
+			self.logInfo(f'currentEventID: {currentEvent["event_uid"]}, currentEventName: {currentEvent["summary"]}')
+		else:
+			self.logInfo(f'No current event.')
+			
 		self.logInfo(f'lastVerifiedEventID: {lastVerifiedEventID}')
 
 		# Verification Required
