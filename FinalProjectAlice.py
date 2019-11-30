@@ -34,8 +34,12 @@ class FinalProjectAlice(Module):
 	def onBooted(self):
 		serial = self.getserial()
 		self.logInfo(f'Serial Number: {serial}')
-		name = self.getConfig('name')
-		if name:
+		response = requests.get(f'https://cxweif56vl.execute-api.us-west-2.amazonaws.com/prod/endpoint/{serial}/config')
+
+		if response.ok:
+			self.logInfo(f'Response: response.content')
+			config = json.loads(response.content)
+
 			self.loadCalendar()
 			self.updateConfig(key="verificationCount", value=0)
 			self.checkVerification()
