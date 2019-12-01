@@ -244,6 +244,7 @@ class FinalProjectAlice(Module):
 		return time
 
 	def getCurrentNextEvent(self):
+		last_verified_event_id = self.getConfig('lastVerifiedEventID')
 		eventList = json.loads(self.getConfig('eventList'))
 		timezone_id = 'US/Pacific'
 
@@ -256,6 +257,12 @@ class FinalProjectAlice(Module):
 			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
 			if event_start <= now and event_end > now:
 				currentEvent = event
+
+				if last_verified_event_id == currentEvent['eventID']:
+					currentEvent['verified'] = True
+				else:
+					currentEvent['verified'] = False
+
 			elif currentEvent:
 				nextEvent = event
 
