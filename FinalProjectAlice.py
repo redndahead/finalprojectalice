@@ -134,8 +134,7 @@ class FinalProjectAlice(Module):
 			text = f'The meeting {event["summary"]} should have begun. Are the attendee\'s here?',
 			intentFilter=[self._INTENT_ATTENDEE_THERE],
 			customData={
-				'EventID': event['event_id'],
-				'Timeout': event_timeout
+				'EventID': event['event_id']
 			}
 		)
 
@@ -145,6 +144,7 @@ class FinalProjectAlice(Module):
 			verification_wait_time = int(self.getConfig('verificationWaitTime'))
 			verification_max_count = int(self.getConfig('verificationMaxCount'))
 			expire_length = verification_wait_time * (verification_max_count - 1) + 40
+			self.logInfo(f'expire length: {expire_length}')
 			event_start = datetime.strptime(event['start']['time'], "%Y-%m-%dT%H:%M:%S%z")
 			event_timeout = event_start + timedelta(seconds=expire_length)
 
