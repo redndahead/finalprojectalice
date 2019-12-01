@@ -258,7 +258,7 @@ class FinalProjectAlice(Module):
 			if event_start <= now and event_end > now:
 				currentEvent = event
 
-				if last_verified_event_id == currentEvent['eventID']:
+				if last_verified_event_id == currentEvent['event_id']:
 					currentEvent['verified'] = True
 				else:
 					currentEvent['verified'] = False
