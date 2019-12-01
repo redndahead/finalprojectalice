@@ -253,6 +253,13 @@ class FinalProjectAlice(Module):
 		event1 = {}
 		event2 = {}
 		output = []
+		eventTemplate = {
+			'name': '',
+			'time': '',
+			'description': '',
+		}
+		output.append(eventTemplate)
+		output.append(eventTemplate)
 		for event in eventList:
 			event_start = datetime.strptime(event["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
 			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
@@ -269,13 +276,6 @@ class FinalProjectAlice(Module):
 			elif event1:
 				event2 = event
 
-		eventTemplate = {
-			'name': '',
-			'time': '',
-			'description': '',
-		}
-		output.append(eventTemplate)
-		output.append(eventTemplate)
 		if event1:
 			event_start = datetime.strptime(event1["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
 			event_start_formatted = event_start.strftime("%-I:%M %p")
@@ -291,15 +291,15 @@ class FinalProjectAlice(Module):
 				output[0]['verified'] = event1['verified']
 
 		if event2:
-			event_start = datetime.strptime(event1["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+			event_start = datetime.strptime(event2["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
 			event_start_formatted = event_start.strftime("%-I:%M %p")
 			event_start_date = event_start.strftime("%-m/%-d/%y")
-			event_end = datetime.strptime(event1["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+			event_end = datetime.strptime(event2["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
 			event_end_formatted = event_end.strftime("%-I:%M %p")
 
-			output[0]['name'] = event1['summary']
-			output[0]['time'] = event_start_date + " " + event_start_formatted + " - " + event_end_formatted
-			output[0]['description'] = event1['description']
+			output[1]['name'] = event2['summary']
+			output[1]['time'] = event_start_date + " " + event_start_formatted + " - " + event_end_formatted
+			output[1]['description'] = event2['description']
 
 		return output
 
