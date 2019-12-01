@@ -162,7 +162,7 @@ class FinalProjectAlice(Module):
 				self.say(f'The room reservation has been removed.')
 			else:
 				self.logInfo(f'Continue checking')
-				self.ThreadManager.doLater(interval=60, func=self.isPassedTime, args=[event])
+				self.ThreadManager.doLater(interval=4, func=self.isPassedTime, args=[event])
 
 	################################################
 	#		 		Intents						   #
