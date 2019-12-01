@@ -261,48 +261,27 @@ class FinalProjectAlice(Module):
 		output.append(eventTemplate)
 		output.append(eventTemplate)
 		for event in eventList:
+			eventItem = {}
 			event_start = datetime.strptime(event["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+			event_start_formatted = event_start.strftime("%-I:%M %p")
+			event_start_date = event_start.strftime("%-m/%-d/%y")
 			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
-			self.logInfo(f'Initial Loop Event: {event["summary"]}')
+			event_end_formatted = event_end.strftime("%-I:%M %p")
 
-			if event_end > now and not event1:
-				event1 = event
+			eventItem['time'] = event_start_date + " " + event_start_formatted + " - " + event_end_formatted
+			eventItem['summary'] = event['summary']
+			eventItem['description'] = event['description']
 
-				if event_start <= now:
-					if last_verified_event_id == event1['event_id']:
-						event1['verified'] = True
-					else:
-						event1['verified'] = False
+			if event_start <= now:
+				if last_verified_event_id == event1['event_id']:
+					eventItem['verified'] = True
+				else:
+					eventItem['verified'] = False
 
-			elif event1:
-				self.logInfo(f'Event 2: {event["summary"]}')
-				event2 = event
+			output.append(eventItem)
+
+			if len(output) == 2:
 				break
-
-		if event1:
-			event_start = datetime.strptime(event1["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
-			event_start_formatted = event_start.strftime("%-I:%M %p")
-			event_start_date = event_start.strftime("%-m/%-d/%y")
-			event_end = datetime.strptime(event1["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
-			event_end_formatted = event_end.strftime("%-I:%M %p")
-
-
-			output[0]['name'] = event1['summary']
-			output[0]['time'] = event_start_date + " " + event_start_formatted + " - " + event_end_formatted
-			output[0]['description'] = event1['description']
-			if "verified" in event1:
-				output[0]['verified'] = event1['verified']
-
-		if event2:
-			event_start = datetime.strptime(event2["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
-			event_start_formatted = event_start.strftime("%-I:%M %p")
-			event_start_date = event_start.strftime("%-m/%-d/%y")
-			event_end = datetime.strptime(event2["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
-			event_end_formatted = event_end.strftime("%-I:%M %p")
-
-			output[1]['name'] = event2['summary']
-			output[1]['time'] = event_start_date + " " + event_start_formatted + " - " + event_end_formatted
-			output[1]['description'] = event2['description']
 
 		return output
 
