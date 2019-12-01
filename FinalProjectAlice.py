@@ -265,7 +265,7 @@ class FinalProjectAlice(Module):
 			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
 			self.logInfo(f'Initial Loop Event: {event["summary"]}')
 
-			if event_end > now:
+			if event_end > now and not event1:
 				event1 = event
 
 				if event_start <= now:
