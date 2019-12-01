@@ -3,6 +3,7 @@ import pycronofy
 from datetime import datetime, timedelta
 import pytz
 import requests
+import uuid
 
 from core.base.model.Intent import Intent
 from core.base.model.Module import Module
@@ -83,6 +84,8 @@ class FinalProjectAlice(Module):
 										 localized_times=True
 										 ).all()
 
+		all_events_output = json.dumps(all_events)
+		self.logInfo(f'{all_events_output}')
 		event_list = []
 		for event in all_events:
 			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
@@ -236,3 +239,42 @@ class FinalProjectAlice(Module):
 		calendarID = self.getConfig('calendarID')
 		cronofy = pycronofy.Client(access_token=key)
 		cronofy.delete_event(calendar_id=calendarID, event_id=eventID)
+
+	def createEvents(self):
+		key = self.getConfig('cronofykey')
+		calendar_id = self.getConfig('calendarID')
+		cronofy = pycronofy.Client(access_token=key)
+		timezone_id = 'US/Pacific'
+
+		# First delete events.
+		cronofy.delete_all_events(calendar_ids=(calendar_id))
+
+		event_id = 'finalprojectalice-%s' % uuid.uuid4()
+		event = {
+			'event_id': event_id,
+			'summary': 'Current Event',
+			'description': 'Here is the summary of the current event.',
+			'start': datetime.utcnow(),
+			'end': datetime.utcnow() + timedelta(minutes=15),
+			'tzid': timezone_id,
+			'location': {
+				'description': 'Machine Room'
+			}
+		}
+
+		cronofy.upsert_event(calendar_id=calendar_id, event=event)
+
+		event_id = 'finalprojectalice-%s' % uuid.uuid4()
+		event = {
+			'event_id': event_id,
+			'summary': 'Next Event',
+			'description': 'Here is the summary of the next event.',
+			'start': datetime.utcnow() + timedelta(minutes=30),
+			'end': datetime.utcnow() + timedelta(minutes=45),
+			'tzid': timezone_id,
+			'location': {
+				'description': 'Machine Room'
+			}
+		}
+
+		cronofy.upsert_event(calendar_id=calendar_id, event=event)
