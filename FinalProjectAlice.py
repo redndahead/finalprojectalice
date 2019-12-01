@@ -266,6 +266,9 @@ class FinalProjectAlice(Module):
 			elif currentEvent:
 				nextEvent = event
 
+		self.logInfo(currentEvent)
+		self.logInfo(nextEvent);
+
 		return [currentEvent, nextEvent]
 
 	def deleteEvent(self, eventID: str):
