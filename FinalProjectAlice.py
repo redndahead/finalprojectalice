@@ -250,16 +250,7 @@ class FinalProjectAlice(Module):
 
 		tz = pytz.timezone(timezone_id)
 		now = datetime.now(tz=tz)
-		event1 = {}
-		event2 = {}
 		output = []
-		eventTemplate = {
-			'name': '',
-			'time': '',
-			'description': '',
-		}
-		output.append(eventTemplate)
-		output.append(eventTemplate)
 		for event in eventList:
 			eventItem = {}
 			event_start = datetime.strptime(event["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
