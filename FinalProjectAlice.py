@@ -97,6 +97,9 @@ class FinalProjectAlice(Module):
 	def checkVerification(self):
 		self.logInfo('Checking for verification.')
 
+		# Always loop
+		self.ThreadManager.doLater(interval=60, func=self.checkVerification)
+
 		lastVerifiedEventID = self.getConfig('lastVerifiedEventID')
 
 		eventList = json.loads(self.getConfig('eventList'))
@@ -122,23 +125,44 @@ class FinalProjectAlice(Module):
 		# Verification Required
 		if currentEvent and lastVerifiedEventID != currentEvent["event_id"]:
 			self.askQuestion(currentEvent)
-		# No verification Required
-		else:
-			self.ThreadManager.doLater(interval=60, func=self.checkVerification)
+			self.isPassedTime(currentEvent)
 
 	def askQuestion(self, event: {}):
 		self.logInfo(f'Asking the question')
+
 		self.ask(
 			text = f'The meeting {event["summary"]} should have begun. Are the attendee\'s here?',
 			intentFilter=[self._INTENT_ATTENDEE_THERE],
 			customData={
-				'EventID': event['event_id']
+				'EventID': event['event_id'],
+				'Timeout': event_timeout
 			}
 		)
 
-	def onIntentNotRecognized(self, session: DialogSession):
-		self.logInfo('Session Ended')
-		self.logInfo(session.intent)
+	def isPassedTime(self, event):
+		last_verified_event_id = self.getConfig('lastVerifiedEventID')
+		if (last_verified_event_id != event['event_id']):
+			verification_wait_time = int(self.getConfig('verificationWaitTime'))
+			verification_max_count = int(self.getConfig('verificationMaxCount'))
+			expire_length = verification_wait_time * (verification_max_count - 1) + 40
+			event_start = datetime.strptime(event['start']['time'], "%Y-%m-%dT%H:%M:%S%z")
+			event_timeout = event_start + timedelta(seconds=expire_length)
+
+			timezone_id = 'US/Pacific'
+
+			tz = pytz.timezone(timezone_id)
+			now = datetime.now(tz=tz)
+
+			if now >= event_timeout:
+				# Release the room
+				self.deleteEvent(eventID=event["event_id"])
+				self.logInfo(f'Expire time reached')
+				self.logInfo(f'Room has been released. EventID: {event["event_id"]}')
+				self.updateConfig(key="lastVerifiedEventID", value=event["event_id"])
+				self.say(f'The room reservation has been removed.')
+			else:
+				self.logInfo(f'Continue checking')
+				self.ThreadManager.doLater(interval=60, func=self.isPassedTime(event))
 
 	################################################
 	#		 		Intents						   #
@@ -176,26 +200,6 @@ class FinalProjectAlice(Module):
 			self.logInfo(f'User responded yes.')
 			self.updateConfig(key="lastVerifiedEventID", value=session.customData["EventID"])
 			self.say(f'Thank you enjoy your meeting.')
-			self.ThreadManager.doLater(interval=60, func=self.checkVerification)
-		else:
-			self.logInfo(f'User responded no.')
-			verification_count = int(self.getConfig('verificationCount')) + 1
-			verification_max_count = int(self.getConfig('verificationMaxCount'))
-
-			if verification_count == verification_max_count:
-				# Release the room
-				self.deleteEvent(eventID=session.customData["EventID"])
-				self.logInfo(f'Max count reached.')
-				self.logInfo(f'Room has been released. EventID: {session.customData["EventID"]}')
-				self.updateConfig(key="lastVerifiedEventID", value=session.customData["EventID"])
-				self.updateConfig(key="verificationCount", value=0)
-				self.say(f'The room reservation has been removed.')
-				self.ThreadManager.doLater(interval=60, func=self.checkVerification)
-			else:
-				self.logInfo(f'Max count not reached.')
-				self.updateConfig(key="verificationCount", value=verification_count)
-				verification_wait_time = int(self.getConfig('verificationWaitTime'))
-				self.ThreadManager.doLater(interval=verification_wait_time, func=self.checkVerification)
 
 	@IntentHandler('DanceDebug')
 	def danceDebug(self, session:DialogSession, **_kwargs):
