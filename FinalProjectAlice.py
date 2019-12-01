@@ -138,7 +138,7 @@ class FinalProjectAlice(Module):
 
 	def onSessionEnded(self, session: DialogSession):
 		self.logInfo('Session Ended')
-		self.logInfo(session.payload)
+		self.logInfo(session)
 
 	################################################
 	#		 		Intents						   #
