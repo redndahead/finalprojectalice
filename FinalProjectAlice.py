@@ -263,6 +263,7 @@ class FinalProjectAlice(Module):
 		for event in eventList:
 			event_start = datetime.strptime(event["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
 			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+			self.logInfo(f'Initial Loop Event: {event["summary"]}')
 
 			if event_end > now:
 				event1 = event
@@ -274,7 +275,9 @@ class FinalProjectAlice(Module):
 						event1['verified'] = False
 
 			elif event1:
+				self.logInfo(f'Event 2: {event["summary"]}')
 				event2 = event
+				break
 
 		if event1:
 			event_start = datetime.strptime(event1["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
@@ -285,7 +288,7 @@ class FinalProjectAlice(Module):
 
 
 			output[0]['name'] = event1['summary']
-			output[0]['time'] =  event_start_date + " " + event_start_formatted + " - " + event_end_formatted
+			output[0]['time'] = event_start_date + " " + event_start_formatted + " - " + event_end_formatted
 			output[0]['description'] = event1['description']
 			if "verified" in event1:
 				output[0]['verified'] = event1['verified']
