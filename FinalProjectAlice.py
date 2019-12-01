@@ -45,6 +45,9 @@ class FinalProjectAlice(Module):
 							   calendarID=config['CalendarID'],
 							   verificationWaitTime=config['VerificationWaitTime'],
 							   verificationMaxCount=config['VerificationMaxCount'])
+				# Only used during testing.
+				self.createEvents()
+				
 				self.loadCalendar()
 				self.updateConfig(key="verificationCount", value=0)
 				self.checkVerification()
