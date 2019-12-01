@@ -138,7 +138,7 @@ class FinalProjectAlice(Module):
 
 	def onIntentNotRecognized(self, session: DialogSession):
 		self.logInfo('Session Ended')
-		self.logInfo(session.payload)
+		self.logInfo(session.payload.intent)
 
 	################################################
 	#		 		Intents						   #
