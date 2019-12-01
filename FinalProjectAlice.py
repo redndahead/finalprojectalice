@@ -47,7 +47,7 @@ class FinalProjectAlice(Module):
 							   verificationMaxCount=config['VerificationMaxCount'])
 				# Only used during testing.
 				self.createEvents()
-				
+
 				self.loadCalendar()
 				self.updateConfig(key="verificationCount", value=0)
 				self.checkVerification()
@@ -118,14 +118,14 @@ class FinalProjectAlice(Module):
 				break
 
 		if currentEvent:
-			self.logInfo(f'currentEventID: {currentEvent["event_uid"]}, currentEventName: {currentEvent["summary"]}')
+			self.logInfo(f'currentEventID: {currentEvent["event_id"]}, currentEventName: {currentEvent["summary"]}')
 		else:
 			self.logInfo(f'No current event.')
 
 		self.logInfo(f'lastVerifiedEventID: {lastVerifiedEventID}')
 
 		# Verification Required
-		if currentEvent and lastVerifiedEventID != currentEvent["event_uid"]:
+		if currentEvent and lastVerifiedEventID != currentEvent["event_id"]:
 			self.askQuestion(currentEvent)
 		# No verification Required
 		else:
@@ -137,7 +137,7 @@ class FinalProjectAlice(Module):
 			text = f'The meeting {event["summary"]} should have begun. Are the attendee\'s here?',
 			intentFilter=[self._INTENT_ATTENDEE_THERE],
 			customData={
-				'EventID': event['event_uid']
+				'EventID': event['event_id']
 			}
 		)
 
