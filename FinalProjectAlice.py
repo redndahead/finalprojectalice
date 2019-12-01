@@ -250,26 +250,58 @@ class FinalProjectAlice(Module):
 
 		tz = pytz.timezone(timezone_id)
 		now = datetime.now(tz=tz)
-		currentEvent = {}
-		nextEvent = {}
+		event1 = {}
+		event2 = {}
+		output = []
 		for event in eventList:
 			event_start = datetime.strptime(event["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
 			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
-			if event_start <= now and event_end > now:
-				currentEvent = event
 
-				if last_verified_event_id == currentEvent['event_id']:
-					currentEvent['verified'] = True
-				else:
-					currentEvent['verified'] = False
+			if event_end > now:
+				event1 = event
 
-			elif currentEvent:
-				nextEvent = event
+				if event_start <= now:
+					if last_verified_event_id == event1['event_id']:
+						event1['verified'] = True
+					else:
+						event1['verified'] = False
 
-		self.logInfo(currentEvent)
-		self.logInfo(nextEvent);
+			elif event1:
+				event2 = event
 
-		return [currentEvent, nextEvent]
+		eventTemplate = {
+			'name': '',
+			'time': '',
+			'description': '',
+		}
+		output.append(eventTemplate)
+		output.append(eventTemplate)
+		if event1:
+			event_start = datetime.strptime(event1["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+			event_start_formatted = event_start.strftime("%-I:%M %p")
+			event_start_date = event_start.strftime("%-m/%-d/%y")
+			event_end = datetime.strptime(event1["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+			event_end_formatted = event_end.strftime("%-I:%M %p")
+
+
+			output[0]['name'] = event1['summary']
+			output[0]['time'] =  event_start_date + " " + event_start_formatted + " - " + event_end_formatted
+			output[0]['description'] = event1['description']
+			if "verified" in event1:
+				output[0]['verified'] = event1['verified']
+
+		if event2:
+			event_start = datetime.strptime(event1["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+			event_start_formatted = event_start.strftime("%-I:%M %p")
+			event_start_date = event_start.strftime("%-m/%-d/%y")
+			event_end = datetime.strptime(event1["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+			event_end_formatted = event_end.strftime("%-I:%M %p")
+
+			output[0]['name'] = event1['summary']
+			output[0]['time'] = event_start_date + " " + event_start_formatted + " - " + event_end_formatted
+			output[0]['description'] = event1['description']
+
+		return output
 
 	def deleteEvent(self, eventID: str):
 		key = self.getConfig('cronofykey')
