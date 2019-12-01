@@ -34,11 +34,9 @@ class FinalProjectAlice(Module):
 
 	def onBooted(self):
 		serial = self.getserial()
-		self.logInfo(f'Serial Number: {serial}')
 		response = requests.get(f'https://cxweif56vl.execute-api.us-west-2.amazonaws.com/prod/endpoint/{serial}/config')
-		self.logInfo(f'Status Code: {response.status_code}')
 		if response.ok:
-			self.logInfo(f'Response: {response.content}')
+			self.logInfo(f'Configuration Response: {response.content}')
 			config = json.loads(response.content)
 			if config:
 				self.setConfig(name=config['Name'],
@@ -52,8 +50,7 @@ class FinalProjectAlice(Module):
 				self.updateConfig(key="verificationCount", value=0)
 				self.checkVerification()
 			else:
-				self.logInfo(f'No Configuration')
-				self.say(f'The serial number is {serial}')
+				self.say(f'The device id is {serial}')
 
 	def setConfig(self, name: str, calendarID: str, verificationWaitTime: int, verificationMaxCount: int):
 		self.updateConfig(key="name", value=name)
@@ -87,8 +84,6 @@ class FinalProjectAlice(Module):
 										 localized_times=True
 										 ).all()
 
-		all_events_output = json.dumps(all_events)
-		self.logInfo(f'{all_events_output}')
 		event_list = []
 		for event in all_events:
 			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
@@ -141,6 +136,10 @@ class FinalProjectAlice(Module):
 			}
 		)
 
+	def onSessionEnded(self, session: DialogSession):
+		self.logInfo('Session Ended')
+		self.logInfo(session.payload)
+
 	################################################
 	#		 		Intents						   #
 	################################################
@@ -190,6 +189,7 @@ class FinalProjectAlice(Module):
 				self.logInfo(f'Room has been released. EventID: {session.customData["EventID"]}')
 				self.updateConfig(key="lastVerifiedEventID", value=session.customData["EventID"])
 				self.updateConfig(key="verificationCount", value=0)
+				self.say(f'The room reservation has been removed.')
 				self.ThreadManager.doLater(interval=60, func=self.checkVerification)
 			else:
 				self.logInfo(f'Max count not reached.')
