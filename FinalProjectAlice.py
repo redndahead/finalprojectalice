@@ -136,7 +136,7 @@ class FinalProjectAlice(Module):
 			}
 		)
 
-	def onSessionTimeout(self, session: DialogSession):
+	def onIntentNotRecognized(self, session: DialogSession):
 		self.logInfo('Session Ended')
 		self.logInfo(session.payload)
 
