@@ -9,8 +9,8 @@
 		"dataType": "integer",
 		"description": "The time to wait in between verifications."
 	},
-	"verificationMaxCount": {
-		"defaultValue": 3,
+	"verificationTimeout": {
+		"defaultValue": 900,
 		"dataType": "integer",
 		"description": "The maximum number of times to ask."
 	},
@@ -41,10 +41,10 @@
 		"description": "Last event that was verified.",
 		"display": "hidden"
 	},
-	"verificationCount": {
-		"defaultValue": 0,
-		"dataType": "integer",
-		"description": "The number of times asked.",
+	"inVerification": {
+		"defaultValue": false,
+		"dataType": "boolean",
+		"description": "Keeps track if we are in verification time or not.",
 		"display": "hidden"
 	}
 }

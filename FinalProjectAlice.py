@@ -42,21 +42,20 @@ class FinalProjectAlice(Module):
 				self.setConfig(name=config['Name'],
 							   calendarID=config['CalendarID'],
 							   verificationWaitTime=config['VerificationWaitTime'],
-							   verificationMaxCount=config['VerificationMaxCount'])
+							   verificationTimeout=config['VerificationTimeout'])
 				# Only used during testing.
 				self.createEvents()
 
 				self.loadCalendar()
-				self.updateConfig(key="verificationCount", value=0)
 				self.checkVerification()
 			else:
 				self.say(f'The device id is {serial}')
 
-	def setConfig(self, name: str, calendarID: str, verificationWaitTime: int, verificationMaxCount: int):
+	def setConfig(self, name: str, calendarID: str, verificationWaitTime: int, verificationTimeout: int):
 		self.updateConfig(key="name", value=name)
 		self.updateConfig(key="calendarID", value=calendarID)
 		self.updateConfig(key="verificationWaitTime", value=verificationWaitTime)
-		self.updateConfig(key="verificationMaxCount", value=verificationMaxCount)
+		self.updateConfig(key="verificationTimeout", value=verificationTimeout)
 
 	def loadCalendar(self):
 		calendar_refresh_time = int(self.getConfig('calendarRefreshTime'))
@@ -125,7 +124,9 @@ class FinalProjectAlice(Module):
 		# Verification Required
 		if currentEvent and lastVerifiedEventID != currentEvent["event_id"]:
 			self.askQuestion(currentEvent)
-			self.isPassedTime(currentEvent)
+			if not self.getConfig('inVerification'):
+				self.updateConfig(key="inVerification", value=True)
+				self.isPassedTime(currentEvent)
 
 	def askQuestion(self, event: {}):
 		self.logInfo(f'Asking the question')
@@ -141,9 +142,8 @@ class FinalProjectAlice(Module):
 	def isPassedTime(self, event):
 		last_verified_event_id = self.getConfig('lastVerifiedEventID')
 		if (last_verified_event_id != event['event_id']):
-			verification_wait_time = int(self.getConfig('verificationWaitTime'))
-			verification_max_count = int(self.getConfig('verificationMaxCount'))
-			expire_length = verification_wait_time * (verification_max_count - 1) + 40
+			verification_timeout = int(self.getConfig('verificationTimeout'))
+			expire_length = verification_timeout + 50
 			self.logInfo(f'expire length: {expire_length}')
 			event_start = datetime.strptime(event['start']['time'], "%Y-%m-%dT%H:%M:%S%z")
 			event_timeout = event_start + timedelta(seconds=expire_length)
@@ -160,6 +160,7 @@ class FinalProjectAlice(Module):
 				self.logInfo(f'Room has been released. EventID: {event["event_id"]}')
 				self.updateConfig(key="lastVerifiedEventID", value=event["event_id"])
 				self.say(f'The room reservation has been removed.')
+				self.updateConfig(key="inVerification", value=False)
 			else:
 				self.logInfo(f'Continue checking')
 				self.ThreadManager.doLater(interval=4, func=self.isPassedTime, args=[event])
@@ -199,6 +200,7 @@ class FinalProjectAlice(Module):
 		if self.Commons.isYes(session):
 			self.logInfo(f'User responded yes.')
 			self.updateConfig(key="lastVerifiedEventID", value=session.customData["EventID"])
+			self.updateConfig(key="inVerification", value=False)
 			self.say(f'Thank you enjoy your meeting.')
 
 	@IntentHandler('DanceDebug')
