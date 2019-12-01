@@ -273,7 +273,7 @@ class FinalProjectAlice(Module):
 			eventItem['description'] = event['description']
 
 			if event_start <= now:
-				if last_verified_event_id == event1['event_id']:
+				if last_verified_event_id == event['event_id']:
 					eventItem['verified'] = True
 				else:
 					eventItem['verified'] = False
