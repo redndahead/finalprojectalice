@@ -136,9 +136,9 @@ class FinalProjectAlice(Module):
 			}
 		)
 
-	def onSessionEnded(self, session: DialogSession):
+	def onSessionTimeout(self, session: DialogSession):
 		self.logInfo('Session Ended')
-		self.logInfo(session)
+		self.logInfo(session.payload)
 
 	################################################
 	#		 		Intents						   #
