@@ -243,6 +243,24 @@ class FinalProjectAlice(Module):
 		time = time + ' ' + ampm
 		return time
 
+	def getCurrentNextEvent(self):
+		eventList = json.loads(self.getConfig('eventList'))
+		timezone_id = 'US/Pacific'
+
+		tz = pytz.timezone(timezone_id)
+		now = datetime.now(tz=tz)
+		currentEvent = {}
+		nextEvent = {}
+		for event in eventList:
+			event_start = datetime.strptime(event["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+			if event_start <= now and event_end > now:
+				currentEvent = event
+			elif currentEvent:
+				nextEvent = event
+
+		return [currentEvent, nextEvent]
+
 	def deleteEvent(self, eventID: str):
 		key = self.getConfig('cronofykey')
 		calendarID = self.getConfig('calendarID')
