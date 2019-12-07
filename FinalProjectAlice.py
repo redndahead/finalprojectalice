@@ -294,8 +294,8 @@ class FinalProjectAlice(Module):
 		event_id = 'finalprojectalice-%s' % uuid.uuid4()
 		event = {
 			'event_id': event_id,
-			'summary': 'Current Event',
-			'description': 'Here is the summary of the current event.',
+			'summary': 'Main Website Demo',
+			'description': 'Show off what\'s new on the main website.',
 			'start': datetime.utcnow(),
 			'end': datetime.utcnow() + timedelta(minutes=15),
 			'tzid': timezone_id,
@@ -309,8 +309,8 @@ class FinalProjectAlice(Module):
 		event_id = 'finalprojectalice-%s' % uuid.uuid4()
 		event = {
 			'event_id': event_id,
-			'summary': 'Next Event',
-			'description': 'Here is the summary of the next event.',
+			'summary': 'Salesforce Deployment Stand-up',
+			'description': 'Daily stand-up of the Salesforce Deployment project.',
 			'start': datetime.utcnow() + timedelta(minutes=30),
 			'end': datetime.utcnow() + timedelta(minutes=45),
 			'tzid': timezone_id,
