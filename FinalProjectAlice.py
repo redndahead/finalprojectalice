@@ -244,36 +244,40 @@ class FinalProjectAlice(Module):
 		return time
 
 	def getCurrentNextEvent(self):
-		last_verified_event_id = self.getConfig('lastVerifiedEventID')
-		eventList = json.loads(self.getConfig('eventList'))
-		timezone_id = 'US/Pacific'
+		calendarID = self.getConfig('calendarID')
+		if (calendarID):
+			last_verified_event_id = self.getConfig('lastVerifiedEventID')
+			eventList = json.loads(self.getConfig('eventList'))
+			timezone_id = 'US/Pacific'
 
-		tz = pytz.timezone(timezone_id)
-		now = datetime.now(tz=tz)
-		output = []
-		for event in eventList:
-			eventItem = {}
-			event_start = datetime.strptime(event["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
-			event_start_formatted = event_start.strftime("%-I:%M %p")
-			event_start_date = event_start.strftime("%-m/%-d/%y")
-			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
-			event_end_formatted = event_end.strftime("%-I:%M %p")
+			tz = pytz.timezone(timezone_id)
+			now = datetime.now(tz=tz)
+			output = []
+			for event in eventList:
+				eventItem = {}
+				event_start = datetime.strptime(event["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+				event_start_formatted = event_start.strftime("%-I:%M %p")
+				event_start_date = event_start.strftime("%-m/%-d/%y")
+				event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
+				event_end_formatted = event_end.strftime("%-I:%M %p")
 
-			eventItem['id'] = event['event_id']
-			eventItem['time'] = event_start_date + " " + event_start_formatted + " - " + event_end_formatted
-			eventItem['summary'] = event['summary']
-			eventItem['description'] = event['description']
+				eventItem['id'] = event['event_id']
+				eventItem['time'] = event_start_date + " " + event_start_formatted + " - " + event_end_formatted
+				eventItem['summary'] = event['summary']
+				eventItem['description'] = event['description']
 
-			if event_start <= now:
-				if last_verified_event_id == event['event_id']:
-					eventItem['verified'] = True
-				else:
-					eventItem['verified'] = False
+				if event_start <= now:
+					if last_verified_event_id == event['event_id']:
+						eventItem['verified'] = True
+					else:
+						eventItem['verified'] = False
 
-			output.append(eventItem)
+				output.append(eventItem)
 
-			if len(output) == 2:
-				break
+				if len(output) == 2:
+					break
+		else:
+			output = False
 
 		return output
 
