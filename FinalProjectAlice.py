@@ -156,11 +156,12 @@ class FinalProjectAlice(Module):
 			if now >= event_timeout:
 				# Release the room
 				self.deleteEvent(eventID=event["event_id"])
+				self.stopVerification(eventID=event["event_id"])
 				self.logInfo(f'Expire time reached')
 				self.logInfo(f'Room has been released. EventID: {event["event_id"]}')
-				self.updateConfig(key="lastVerifiedEventID", value=event["event_id"])
+
+
 				self.say(f'The room reservation has been removed.')
-				self.updateConfig(key="inVerification", value=False)
 			else:
 				self.logInfo(f'Continue checking')
 				self.ThreadManager.doLater(interval=4, func=self.isPassedTime, args=[event])
@@ -199,8 +200,7 @@ class FinalProjectAlice(Module):
 		self.endSession(session.sessionId)
 		if self.Commons.isYes(session):
 			self.logInfo(f'User responded yes.')
-			self.updateConfig(key="lastVerifiedEventID", value=session.customData["EventID"])
-			self.updateConfig(key="inVerification", value=False)
+			self.stopVerification(eventID=session.customData["EventID"])
 			self.say(f'Thank you enjoy your meeting.')
 
 	@IntentHandler('DanceDebug')
@@ -259,6 +259,7 @@ class FinalProjectAlice(Module):
 			event_end = datetime.strptime(event["end"]["time"], "%Y-%m-%dT%H:%M:%S%z")
 			event_end_formatted = event_end.strftime("%-I:%M %p")
 
+			eventItem['id'] = event['event_id']
 			eventItem['time'] = event_start_date + " " + event_start_formatted + " - " + event_end_formatted
 			eventItem['summary'] = event['summary']
 			eventItem['description'] = event['description']
@@ -275,6 +276,10 @@ class FinalProjectAlice(Module):
 				break
 
 		return output
+
+	def stopVerification(self, eventID: str):
+		self.updateConfig(key="lastVerifiedEventID", value=eventID)
+		self.updateConfig(key="inVerification", value=False)
 
 	def deleteEvent(self, eventID: str):
 		key = self.getConfig('cronofykey')
