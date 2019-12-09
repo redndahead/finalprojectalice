@@ -156,7 +156,7 @@ class FinalProjectAlice(Module):
 			if now >= event_timeout:
 				# Release the room
 				self.deleteEvent(eventID=event["event_id"])
-				self.stopVerification(eventID=event["event_id"])
+				self.stopVerification(eventID=event["event_id"], action="release", type="")
 				self.logInfo(f'Expire time reached')
 				self.logInfo(f'Room has been released. EventID: {event["event_id"]}')
 
@@ -200,7 +200,7 @@ class FinalProjectAlice(Module):
 		self.endSession(session.sessionId)
 		if self.Commons.isYes(session):
 			self.logInfo(f'User responded yes.')
-			self.stopVerification(eventID=session.customData["EventID"])
+			self.stopVerification(eventID=session.customData["EventID"], action="verify", type="voice")
 			self.say(f'Thank you enjoy your meeting.')
 
 	@IntentHandler('DanceDebug')
@@ -281,9 +281,17 @@ class FinalProjectAlice(Module):
 
 		return output
 
-	def stopVerification(self, eventID: str):
+	def stopVerification(self, eventID: str, action: str, type: str):
 		self.updateConfig(key="lastVerifiedEventID", value=eventID)
 		self.updateConfig(key="inVerification", value=False)
+
+		postData = {
+			'DeviceID': self.getserial(),
+			'Action': action,
+			'Type': type,
+			'Timestamp': '2019-12-08 12:00:00'
+		}
+		requests.post("https://cxweif56vl.execute-api.us-west-2.amazonaws.com/statistics", data=postData)
 
 	def deleteEvent(self, eventID: str):
 		key = self.getConfig('cronofykey')
