@@ -260,7 +260,8 @@ class FinalProjectAlice(Module):
 				'id': "",
 				'time': "",
 				'summary': "No Current Event",
-				'description': ""
+				'description': "",
+				'verified': True
 			}
 
 			placeholder2 = {
