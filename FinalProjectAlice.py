@@ -291,7 +291,7 @@ class FinalProjectAlice(Module):
 			'Type': type,
 			'Timestamp': '2019-12-08 12:00:00'
 		}
-		requests.post("https://cxweif56vl.execute-api.us-west-2.amazonaws.com/statistics", data=postData)
+		requests.post("https://cxweif56vl.execute-api.us-west-2.amazonaws.com/prod/statistics", data=postData)
 
 	def deleteEvent(self, eventID: str):
 		key = self.getConfig('cronofykey')
