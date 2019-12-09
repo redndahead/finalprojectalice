@@ -140,7 +140,9 @@ class FinalProjectAlice(Module):
 		)
 
 	def isPassedTime(self, event):
+		self.logInfo("In isPassedtime");
 		last_verified_event_id = self.getConfig('lastVerifiedEventID')
+		self.logInfo("Last Verified: " + last_verified_event_id + ", Current ID: " + event['event_id'])
 		if (last_verified_event_id != event['event_id']):
 			verification_timeout = int(self.getConfig('verificationTimeout'))
 			expire_length = verification_timeout + 50
