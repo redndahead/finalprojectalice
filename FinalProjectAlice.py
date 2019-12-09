@@ -42,7 +42,8 @@ class FinalProjectAlice(Module):
 				self.setConfig(name=config['Name'],
 							   calendarID=config['CalendarID'],
 							   verificationWaitTime=config['VerificationWaitTime'],
-							   verificationTimeout=config['VerificationTimeout'])
+							   verificationTimeout=config['VerificationTimeout'],
+							   inVerififcation=False)
 				# Only used during testing.
 				self.createEvents()
 
