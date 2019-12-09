@@ -35,6 +35,7 @@ class FinalProjectAlice(Module):
 	def onBooted(self):
 		serial = self.getserial()
 		response = requests.get(f'https://cxweif56vl.execute-api.us-west-2.amazonaws.com/prod/endpoint/{serial}/config')
+		self.updateConfig(key="inVerification", value=False)
 		if response.ok:
 			self.logInfo(f'Configuration Response: {response.content}')
 			config = json.loads(response.content)
@@ -42,8 +43,7 @@ class FinalProjectAlice(Module):
 				self.setConfig(name=config['Name'],
 							   calendarID=config['CalendarID'],
 							   verificationWaitTime=config['VerificationWaitTime'],
-							   verificationTimeout=config['VerificationTimeout'],
-							   inVerififcation=False)
+							   verificationTimeout=config['VerificationTimeout'])
 				# Only used during testing.
 				self.createEvents()
 
@@ -57,6 +57,7 @@ class FinalProjectAlice(Module):
 		self.updateConfig(key="calendarID", value=calendarID)
 		self.updateConfig(key="verificationWaitTime", value=verificationWaitTime)
 		self.updateConfig(key="verificationTimeout", value=verificationTimeout)
+
 
 	def loadCalendar(self):
 		calendar_refresh_time = int(self.getConfig('calendarRefreshTime'))
