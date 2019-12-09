@@ -247,6 +247,7 @@ class FinalProjectAlice(Module):
 
 	def getCurrentNextEvent(self):
 		calendarID = self.getConfig('calendarID')
+
 		if (calendarID):
 			last_verified_event_id = self.getConfig('lastVerifiedEventID')
 			eventList = json.loads(self.getConfig('eventList'))
@@ -255,6 +256,19 @@ class FinalProjectAlice(Module):
 			tz = pytz.timezone(timezone_id)
 			now = datetime.now(tz=tz)
 			output = []
+			placeholder1 = {
+				'id': "",
+				'time': "",
+				'summary': "No Current Event",
+				'description': ""
+			}
+
+			placeholder2 = {
+				'id': "",
+				'time': "",
+				'summary': "No Future Event Scheduled",
+				'description': ""
+			}
 			for event in eventList:
 				eventItem = {}
 				event_start = datetime.strptime(event["start"]["time"], "%Y-%m-%dT%H:%M:%S%z")
@@ -273,11 +287,17 @@ class FinalProjectAlice(Module):
 						eventItem['verified'] = True
 					else:
 						eventItem['verified'] = False
+				elif len(output) == 0:
+					output.append(placeholder1)
 
 				output.append(eventItem)
 
 				if len(output) == 2:
 					break
+
+			if len(output) == 0:
+				output.append(placeholder1)
+				output.append(placeholder2)
 		else:
 			output = False
 
